@@ -8,11 +8,21 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      spacing: {
+        'menu-position-top': '3rem',
+        'menu-position-right': '2.5rem',
+        'burger-menu-height': '4rem',
+        'burger-menu-width': '4rem',
+      },
+      borderRadius: {
+        '4xl' : '2.2rem',
+        'oval': '50%'
+      },
       width: {
-        'nav-icon' : '4rem'
+        'nav-icon' : '3.5rem'
       },
       height: {
-        'nav-icon' : '4rem'
+        'nav-icon' : '3.5rem'
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
