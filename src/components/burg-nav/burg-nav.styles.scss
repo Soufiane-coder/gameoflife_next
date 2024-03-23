@@ -1,0 +1,135 @@
+.navigation-burger-menu{
+    $menu-position-top: 3rem;
+    $menu-position-right: 2.5rem;
+    $burger-menu-height: 3.5rem;
+    $burger-menu-width: 3.5rem;
+
+    &__checkbox {
+        display: none; // this is the checkbox to verify if the menu is opend or closed
+    }
+
+    &__button { // this is the button that when we click on it the background get full of page
+        height: $burger-menu-height ;
+        width: $burger-menu-width;
+        position: fixed;
+        top: $menu-position-top ;
+        right: $menu-position-right ;
+        border-radius: 50%;
+        z-index: 20;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    &__background { // this is the background that it get stretch to fill the page
+        height: $burger-menu-height - .5rem;
+        width: $burger-menu-width - .5rem;
+        border-radius: 50%;
+        position: fixed;
+        top: $menu-position-top + .25rem ;
+        right: $menu-position-right + .25rem;
+        z-index: 10;
+        transition: transform .8s cubic-bezier(0.86, 0, 0.07, 1);
+    }
+
+    &__nav {
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 19;
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        transition: opacity .5s, width 1s; // when it is unchecked do the transtion without delay
+    }
+
+    &__list {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        list-style: none;
+        text-align: center;
+        width: 100%;
+    }
+
+    &__item {
+        margin: .1rem;
+    }
+
+    &__link{
+        width: auto;
+        height: auto;
+        visibility:visible;
+        display: inline-block;
+        font-size: 1.5rem;
+        font-weight: 400;
+        padding: 1rem 1.8rem;
+        text-decoration: none;
+        text-transform: uppercase;
+    }
+
+
+    //FUNCTIONALITY
+    &__checkbox:checked ~ &__background {
+        transform: scale(32)
+    }
+
+    &__checkbox:checked ~ &__nav {
+        opacity: 1;
+        width: 100%;
+        transition: opacity .5s .5s; // when it checked do the transition with the delay
+    }
+
+
+    //ICON
+    &__icon {
+        position: absolute;
+        top: 50%;  
+        right: 50%;
+        transform: translate(50%, 50%);
+
+        &,
+        &::before,
+        &::after {
+            width: 2rem;
+            height: 2px;
+            background-color: white;
+            display: inline-block;
+        }
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            transition: all .2s;
+        }
+
+        &::before { top: -.8rem; } // this is the top top bread of the burger menu
+        &::after { top: .8rem; } // this is the top bottom bread of the burger menu
+    }
+
+    &__button:active &__icon::before {
+        top: -1rem;
+    }
+
+    &__button:active &__icon::after {
+        top: 1rem;
+    }
+
+    &__checkbox:checked + &__button &__icon {
+        background-color: transparent;
+    }
+
+    &__checkbox:checked + &__button &__icon::before {
+        top: 0;
+        transform: rotate(135deg);
+    }
+
+    &__checkbox:checked + &__button &__icon::after {
+        top: 0;
+        transform: rotate(-135deg);
+    }
+    
+}
