@@ -3,6 +3,7 @@ import { Quicksand } from "next/font/google";
 import "./globals.css";
 import description from './description.js'
 import NavigationBar from "@/components/nav-bar/nav-bar.component";
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -18,9 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={quicksand.className}>
+      <body className={`${quicksand.className} bg-gray-50`}>
         <NavigationBar/>
+        <AntdRegistry>
         {children}
+        </AntdRegistry>
       </body>
     </html>
   );
