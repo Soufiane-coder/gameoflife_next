@@ -28,7 +28,7 @@ const BurgNav : React.FC<PropsType> = ({menuNotSignedIn, menuSignedIn}) => {
                     <span className="navigation-burger-menu__icon">&nbsp;</span>
                 </label>
 
-                <div className="navigation-burger-menu__background bg-gradient-radial from-green-700 to-green-900">&nbsp;</div>
+                <div className="navigation-burger-menu__background z-50 bg-gradient-radial from-green-700 to-green-900">&nbsp;</div>
 
                 <nav className="navigation-burger-menu__nav">
                     <ul className="navigation-burger-menu__list">

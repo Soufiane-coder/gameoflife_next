@@ -5,7 +5,22 @@ const nextConfig = {
     webpack(config, {isServer}) {
         config.module.rules.push({
           test: /\.svg$/,
-          use: ["@svgr/webpack"]
+          loader: "@svgr/webpack",
+          options: {
+            prettier: false,
+            svgo: true,
+            svgoConfig: {
+              plugins: [
+                {
+                  name: 'preset-default',
+                  params: {
+                    overrides: { removeViewBox: false },
+                  },
+                },
+              ],
+            },
+            titleProp: true,
+          },
         });
 
         if (!isServer) {
@@ -17,11 +32,10 @@ const nextConfig = {
     
         return config;
       },
-    // images: {
-    //     dangerouslyAllowSVG: true,
-    //     contentDispositionType: 'attachment',
-    //     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-    // }
+      images: {
+        dangerouslyAllowSVG: true,
+        contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+      },
 };
 
 export default nextConfig;
