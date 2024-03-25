@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+    --height-lp-section : 45rem;
+}
+
+body{
+    &::-webkit-scrollbar {
+		width: 13px;
+	}
+
+	&::-webkit-scrollbar-track {
+		@apply bg-gray-50;
+		width: 13px;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		@apply bg-green-700;
+	}
+
+	&::-webkit-scrollbar-thumb:hover {
+		@apply bg-green-800;
+	}
+}
+
+.h2{
+	@apply text-3xl font-semibold text-gray-800
+}
+
