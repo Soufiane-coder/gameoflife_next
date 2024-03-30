@@ -19,10 +19,9 @@ export interface MenuItemType {
 
 const NavigationBar : React.FC = ({}) => {    
 
-    const {data: session} = useSession()
+    const {data: session,} = useSession()
     const router = useRouter()
     
-
     const menuSignedIn: MenuItemType[] = [
     {
         label: 'home gol',
@@ -67,25 +66,25 @@ const NavigationBar : React.FC = ({}) => {
         icon: HomeIcon,
         url: '/',
         action: (url : string) => router.push(url),
-    }, 
-    {
-        label: 'game field',
-        icon: GameFieldIcon,
-        url: '/game-field',
-        action: (url : string) => router.push(url),
-    }, 
-   {
-        label: 'sign up',
-        icon: LoginIcon,
-        url: '/signin',
-        action: (url : string) => signIn(),
-    }, 
-    {
-        label: 'contact',
-        icon: ContactSupportIcon,
-        url: '/about-us',
-        action: (url : string) => router.push(url),
-    }
+        }, 
+        {
+            label: 'game field',
+            icon: GameFieldIcon,
+            url: '/game-field',
+            action: (url : string) => router.push(url),
+        }, 
+        {
+            label: 'sign up',
+            icon: LoginIcon,
+            url: '/signin',
+            action: (url : string) => signIn(),
+        }, 
+        {
+            label: 'contact',
+            icon: ContactSupportIcon,
+            url: '/about-us',
+            action: (url : string) => router.push(url),
+        }
     ]
 
     const usedMenu =  session ? menuSignedIn : menuNotSignedIn

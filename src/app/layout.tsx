@@ -16,11 +16,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-
-}: Readonly<{
-  children: React.ReactNode;
-  pageProps: any
-}>) {
+  }: Readonly<{
+    children: React.ReactNode;
+    pageProps: any
+  }>) {
 
   const theme = {
 
@@ -30,6 +29,7 @@ export default function RootLayout({
     <html lang="en">
       <AntdRegistry >
       <body className={`${quicksand.className} bg-gray-50`}>
+        {/* Providers contains some client side componenet providers (session,)  */}
         <Providers>
           <NavigationBar/>
           <ConfigProvider theme={theme}>
