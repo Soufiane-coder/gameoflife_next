@@ -1,7 +1,8 @@
 import NextAuth from "next-auth"
 import GoogleProvider  from "next-auth/providers/google"
-import type { NextAuthOptions } from "next-auth"
+import type { NextAuthOptions, Session } from "next-auth"
 import { addNewUser } from "@/lib/firebase/user.apis"
+import { AdapterUser } from "next-auth/adapters"
 
 
 export const authOptions : NextAuthOptions = {
@@ -24,6 +25,14 @@ export const authOptions : NextAuthOptions = {
         console.error(err)
       }
       return true
+    },
+    jwt: async ({token, account, user}) => {
+      return token
+    },
+    session: async ({session, token ,}) => {
+      // (session as any).accessToken = token?.accessToken;
+      (session.user as any).id = token.sub
+      return session
     }
   }
 }

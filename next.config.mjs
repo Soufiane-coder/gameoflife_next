@@ -35,6 +35,7 @@ const nextConfig = {
       images: {
         dangerouslyAllowSVG: true,
         contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+        domains: ['lh3.googleusercontent.com']
       },
 };
 

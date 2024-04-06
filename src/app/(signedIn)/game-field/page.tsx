@@ -1,21 +1,37 @@
 'use client'
-import React, { useEffect } from 'react'
-import { getSession, useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { useGetRoutinesQuery, useGetUserQuery } from '@/redux/services/apiSlice'
+import { UserType } from '@/types/user.type'
+import { Button } from 'antd'
+import AddRoutineModal from '@/components/add-routine-modal.component'
+import { useAppDispatch, useAppSelector } from '@/redux/hooks'
+import { setRoutines } from '@/redux/features/routinesSlice'
+import RoutineType from '@/types/routine.type'
 
 const GameField = () => {
-  const {data: session, status} = useSession()
-  // const {data: routines, isLoading, isError} = useGetUserQuery(session?.user)
 
-  // console.log({data: routines, isLoading, isError})
-  if (status === 'loading'){
-    return (<h1>Loading...</h1>)
-  }
+  const {data: session} = useSession()
+  const {data: user} = useGetUserQuery({user: session?.user})
+  const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
+  const reduxRoutines = useAppSelector((state) => state.routines)
 
-  
   return (
     <div>
-      {session?.user?.email}
+      <div>
+        <Button
+          type='primary'
+          onClick={() => setOpenAddRoutine(true)}>
+          Add routine
+        </Button>
+        <AddRoutineModal {...{
+          open: openAddRoutine, 
+          user,
+          setOpen: setOpenAddRoutine}}/>
+      </div>
+      {
+        reduxRoutines?.map((routine, key) => (<p key={key}>{routine.title}|</p>))
+      }
     </div>
   )
 }

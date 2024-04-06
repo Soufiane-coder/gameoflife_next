@@ -29,9 +29,10 @@ export const addNewUser = async (userLite: User | AdapterUser) => {
     
 }
 
-export const getUserData = async (userLite :  User | AdapterUser) => {
+export const getUserData = async (userLite :  User | AdapterUser) : Promise<UserType> => {
+
     const { id: uid, } = userLite;
     const userDoc = doc(db, "users", uid);
     let docSnap = await getDoc(userDoc);
-    return docSnap.data();
+    return docSnap.data() as UserType;
 }

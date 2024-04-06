@@ -3,7 +3,8 @@
 import React, {FC, SVGProps, useEffect} from 'react'
 
 import { HomeIcon, GameFieldIcon , LoginIcon, ContactSupportIcon} from '../../../public/icons';
-import { VscSignOut } from "react-icons/vsc";
+import { PiChartLineFill, PiSignOutBold,  PiGameControllerFill, PiHouseFill , } from "react-icons/pi";
+import { MdSettings } from "react-icons/md";
 import Link from 'next/link';
 import BurgNav from '../burg-nav/burg-nav.component';
 import { signIn, signOut, useSession } from 'next-auth/react';
@@ -25,22 +26,34 @@ const NavigationBar : React.FC = ({}) => {
     const menuSignedIn: MenuItemType[] = [
     {
         label: 'home gol',
-        icon: HomeIcon,
+        icon: PiHouseFill,
         url: '/',
         action: (url : string) => router.push(url),
     }, 
     {
         label: 'game field',
-        icon: GameFieldIcon,
+        icon: PiGameControllerFill,
         url: '/game-field',
         action: (url : string) => router.push(url),
     }, 
     {
-        label: 'clock view',
-        icon:  VscSignOut,
-        url: '/clockView',
+        label: 'Statistics',
+        icon: PiChartLineFill,
+        url: '/statistics',
+        action: (url: string) => router.push(url)
+    },
+    {
+        label: 'Settings',
+        icon: MdSettings,
+        url: '/settings',
+        action: (url: string) => router.push(url)
+    },
+    {
+        label: 'Sign out',
+        icon:  PiSignOutBold,
+        url: '/',
         action: (url : string) => signOut({callbackUrl: '/signin'})
-    }, 
+    },
     // {
     //     label: 'calendar',
     //     icon: CalendarIcon,
@@ -62,17 +75,17 @@ const NavigationBar : React.FC = ({}) => {
 
     const menuNotSignedIn : MenuItemType[] = [
         {
-        label: 'home gol',
-        icon: HomeIcon,
-        url: '/',
-        action: (url : string) => router.push(url),
+            label: 'home gol',
+            icon: PiHouseFill,
+            url: '/',
+            action: (url : string) => router.push(url),
         }, 
         {
             label: 'game field',
-            icon: GameFieldIcon,
+            icon: PiGameControllerFill,
             url: '/game-field',
             action: (url : string) => router.push(url),
-        }, 
+        },
         {
             label: 'sign up',
             icon: LoginIcon,
