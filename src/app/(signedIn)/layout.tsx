@@ -8,6 +8,7 @@ import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
+
 const SignedInLayout = ({ children }: Readonly<{
     children: React.ReactNode;
 }>) => {
@@ -20,7 +21,7 @@ const SignedInLayout = ({ children }: Readonly<{
         if(initRoutines){
           dispatch(setRoutines(initRoutines as RoutineType[]))
         }
-      }, [initRoutines])
+      }, [initRoutines, dispatch])
     
     if (status === 'loading' || isUserLoading === true || Object.keys(user).length === 0){
         return (<h1>Loading...</h1>)

@@ -8,6 +8,8 @@ import AddRoutineModal from '@/components/add-routine-modal.component'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
+import RoutineCard from '@/components/routine-card.component'
+
 
 const GameField = () => {
 
@@ -30,7 +32,7 @@ const GameField = () => {
           setOpen: setOpenAddRoutine}}/>
       </div>
       {
-        reduxRoutines?.map((routine, key) => (<p key={key}>{routine.title}|</p>))
+        reduxRoutines?.map((routine, key) => (<RoutineCard routine={routine} key={key}/>))
       }
     </div>
   )

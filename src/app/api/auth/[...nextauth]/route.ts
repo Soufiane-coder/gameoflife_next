@@ -4,8 +4,7 @@ import type { NextAuthOptions, Session } from "next-auth"
 import { addNewUser } from "@/lib/firebase/user.apis"
 import { AdapterUser } from "next-auth/adapters"
 
-
-export const authOptions : NextAuthOptions = {
+const authOptions : NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [
     GoogleProvider ({
