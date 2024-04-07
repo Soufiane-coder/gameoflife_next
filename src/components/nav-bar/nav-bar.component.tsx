@@ -2,10 +2,9 @@
 
 import React, {FC, SVGProps, useEffect} from 'react'
 
-import { HomeIcon, GameFieldIcon , LoginIcon, ContactSupportIcon} from '../../../public/icons';
+import { LoginIcon, ContactSupportIcon} from '../../../public/icons';
 import { PiChartLineFill, PiSignOutBold,  PiGameControllerFill, PiHouseFill , } from "react-icons/pi";
 import { MdSettings } from "react-icons/md";
-import Link from 'next/link';
 import BurgNav from '../burg-nav/burg-nav.component';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';

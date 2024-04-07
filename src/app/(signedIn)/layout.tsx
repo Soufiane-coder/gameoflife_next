@@ -28,7 +28,7 @@ const SignedInLayout = ({ children }: Readonly<{
     }
    
     return (
-        <main className='p-2'>
+        <main className='p-2 md:pr-20'>
             <UserBar user={user}/>
             {isRoutinesLoading ? <h1>Loading Routines ...</h1> : children}
         </main>

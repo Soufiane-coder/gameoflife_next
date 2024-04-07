@@ -29,3 +29,88 @@ body{
 	@apply text-3xl font-semibold text-gray-800
 }
 
+#body {
+	button{
+		svg{
+			// fill: white
+			stroke: white;
+		}
+	}
+
+	button[color='rose']{
+		@apply bg-rose-600 outline-rose-500;
+		&:hover {
+			@apply bg-rose-500;
+		}
+
+		&:active {
+			@apply bg-rose-700;
+		}
+
+		&:disabled {
+			@apply bg-rose-200
+		}
+		
+	}
+
+	button[color='purple']{
+		@apply bg-purple-600 outline-purple-500;
+		&:hover {
+			@apply bg-purple-500;
+		}
+
+		&:active {
+			@apply bg-purple-700;
+		}
+
+		&:disabled {
+			@apply bg-purple-200
+		}
+		
+	}
+	
+	button[color='orange']{
+		@apply bg-orange-600 outline-orange-500;
+		&:hover {
+			@apply bg-orange-500;
+		}
+
+		&:active {
+			@apply bg-orange-700;
+		}
+
+		&:disabled {
+			@apply bg-orange-200
+		}
+		
+	}
+	button[color='red']{
+		@apply bg-red-600 outline-red-500;
+		&:hover {
+			@apply bg-red-500;
+		}
+
+		&:active {
+			@apply bg-red-700;
+		}
+
+		&:disabled {
+			@apply bg-red-200
+		}
+	}
+
+	button[color='cyan']{
+		@apply bg-cyan-600 outline-cyan-500;
+		&:hover {
+			@apply bg-cyan-500;
+		}
+
+		&:active {
+			@apply bg-cyan-700;
+		}
+
+		&:disabled {
+			@apply bg-cyan-200
+		}
+	}
+}

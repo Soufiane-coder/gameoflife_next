@@ -1,0 +1,15 @@
+body .button{
+    width: 6rem;
+    height: 6rem;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+}

@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useGetRoutinesQuery, useGetUserQuery } from '@/redux/services/apiSlice'
 import { UserType } from '@/types/user.type'
 import { Button } from 'antd'
-import AddRoutineModal from '@/components/add-routine-modal.component'
+import AddRoutineModal from '@/components/add-routine-modal/add-routine-modal.component'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
@@ -31,11 +31,18 @@ const GameField = () => {
           user,
           setOpen: setOpenAddRoutine}}/>
       </div>
-      {
-        reduxRoutines?.map((routine, key) => (<RoutineCard routine={routine} key={key}/>))
-      }
+      <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
+        {
+          reduxRoutines?.length === 0 ? 
+            <h5>There is no routines add Routine</h5>
+          :
+          reduxRoutines?.map((routine, key) => (<RoutineCard routine={routine} key={key}/>))
+        }
+      </div>
     </div>
   )
 }
+
+
 
 export default GameField

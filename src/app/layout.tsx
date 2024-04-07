@@ -22,13 +22,16 @@ export default function RootLayout({
   }>) {
 
   const theme = {
+    token: {
+      colorPrimary: 'rgb(21, 128, 61)',
 
+    },
   }
 
   return (
     <html lang="en">
       <AntdRegistry >
-      <body className={`${quicksand.className} bg-gray-50`}>
+      <body id="body" className={`${quicksand.className} bg-gray-50 `}>
         {/* Providers contains some client side componenet providers (session,)  */}
         <Providers>
           <NavigationBar/>

@@ -12,6 +12,9 @@ const config: Config = {
         '4xl' : '2.2rem',
         'oval': '50%'
       },
+      gridTemplateColumns : {
+        'grid-routine-card-cols' : 'repeat(auto-fit, minmax(22rem, 1fr))',
+      },
       width: {
         'nav-icon' : '3.5rem'
       },
