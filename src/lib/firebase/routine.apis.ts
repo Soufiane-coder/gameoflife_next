@@ -49,7 +49,8 @@ export const getRoutinesFromFirebase = async (uid : string,) => {
     const { docs } = await getDocs(colRef);
     return docs.map(doc => {
         const routine : RoutineDeliverableType = {...doc.data(), routineId: doc.id} as RoutineDeliverableType
-        return fromDelivrableToLocleRoutine(routine)
+        return routine
+        // return fromDelivrableToLocleRoutine(routine)
     })
     // return docs.map(doc => ({...doc.data(), routineId : doc.id}))
 }
@@ -154,3 +155,40 @@ export const addTimeToSpentedTime = async (uid : string, routineId: string, spen
     //     })
     // }
 }
+
+export const uncheckAllRoutinesBelongToUserInFirebase = async (uid : string , routines : RoutineDeliverableType[]) => {
+    const uncheckRoutine = async (routineId : string) => {
+        return await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
+            isSubmitted: false,
+        })
+    }
+
+    await Promise.all(routines.map(routine => uncheckRoutine(routine.routineId as string)))
+    return routines;
+}
+
+
+export const updateTheDayOfLastVisitToTodayInFirebase = async (uid : string) => {
+    try {
+        return await updateDoc(doc(db, `/users`, uid), {
+            lastVisit: serverTimestamp(),
+        })
+    }
+    catch (error) {
+        console.error(error)
+    }
+}
+
+export const UpdateSkipAndLastSubmitInFirebase = async (uid : string, routineId : string , skip : number, lastSubmit : Timestamp ,) => {
+    await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
+        skip,
+        lastSubmit,
+    })
+}
+
+export const setComboToZeroInFirebase = async (uid: string, routineId: string) => {
+    await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
+        combo: 0,
+    })
+}
+

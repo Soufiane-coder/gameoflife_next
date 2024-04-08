@@ -1,5 +1,6 @@
 
 import { createApi, fakeBaseQuery, } from '@reduxjs/toolkit/query/react';
+import { Timestamp } from 'firebase/firestore';
 
 
 export const fireStoreApi = createApi({
@@ -14,10 +15,19 @@ export const fireStoreApi = createApi({
                 return {data}
             }
         }),
-        getRoutines: builder.query<Array<any>, {uid: string | undefined}>({
-            queryFn: async ({uid}) => {
+        getRoutines: builder.query<Array<any>, {uid: string | undefined, lastVisit: Timestamp}>({
+            queryFn: async ({uid, lastVisit}) => {
                 if (!uid) return {data : []}
-                const res = await fetch(`/api/firebase/routines?uid=${uid}`)
+                const res = await fetch(`/api/firebase/routines`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        uid,
+                        lastVisit,
+                    }),
+                })
                 const data = await res.json()
                 return {data}
             },

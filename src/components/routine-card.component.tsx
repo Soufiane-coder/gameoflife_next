@@ -7,15 +7,20 @@ import RoutineType from '@/types/routine.type'
 import { PiArrowArcRightBold } from "react-icons/pi";
 import { GoGoal } from "react-icons/go";
 import Link from 'next/link';
-import { GoalDartIcon } from '../../public/icons';
-import { checkRoutine } from '@/redux/features/routinesSlice';
 import { UserType } from '@/types/user.type';
-import { useAppDispatch } from '@/redux/hooks';
+import CheckRoutinePopup from './check-routine-popup.component';
+
+interface PopupsType {
+  checkPopup: boolean,
+}
 
 const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) => {
-  const [checkLoading, setCheckLoading] = useState<boolean>(false)
+  const init = {
+    checkPopup: false
+  }
+  const [loading, setLoading] = useState<PopupsType>(init)
+  const [popups, setPopups] = useState<PopupsType>(init)
 
-  const dispatch = useAppDispatch()
 
 	const menuItems = [
 		{
@@ -67,27 +72,8 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
  }
 
   const onCheck = async () => {
-    setCheckLoading(true)
-    const {routineId} = routine
-    const {uid} = user
-    try{
-      await fetch('/api/firebase/check-routine', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          routineId,
-          uid,
-          message: ''
-        }),
-      })
-      dispatch(checkRoutine(routineId as string))
-    }catch(error: any){
-      console.log(error, 'Try again later')
-    }finally{
-      setCheckLoading(false)
-    }
+    setPopups(old => ({...old, checkPopup: true}))
+
   }
 
   return (
@@ -108,7 +94,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
             </div>
             <div className='flex justify-between'>
               <Button
-                loading={checkLoading}
+                loading={loading.checkPopup}
                 icon={<PiCheckBold/>}
                 className='min-h-10 min-w-10 p-0'
                 onClick={onCheck}
@@ -141,6 +127,13 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
           </Flex>
         </Card>
       </Badge.Ribbon>
+      <CheckRoutinePopup
+        user={user}
+        routine={routine}
+        loading={loading.checkPopup}
+        setLoading={(etat: boolean) => setLoading(old => ({...old, checkPopup: etat}))}
+        open={popups.checkPopup}
+        setOpen={(etat: boolean) => setPopups(old => ({...old, checkPopup: etat}))}/>
     </div>
   )
 }

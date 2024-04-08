@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import RoutineCard from '@/components/routine-card.component'
+import { Timestamp } from 'firebase/firestore'
 
 
 const GameField = () => {
@@ -17,7 +18,6 @@ const GameField = () => {
   const {data: user} = useGetUserQuery({user: session?.user})
   const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
   const reduxRoutines = useAppSelector((state) => state.routines)
-
   return (
     <div>
       <div>

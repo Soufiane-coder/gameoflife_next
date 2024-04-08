@@ -14,7 +14,7 @@ const SignedInLayout = ({ children }: Readonly<{
 
     const {data: session, status} = useSession()
     const {data: user, isLoading: isUserLoading} = useGetUserQuery({user : session?.user})
-    const {data: initRoutines, isLoading : isRoutinesLoading,} = useGetRoutinesQuery({ uid: user?.uid})
+    const {data: initRoutines, isLoading : isRoutinesLoading,} = useGetRoutinesQuery({ uid: user?.uid, lastVisit: user?.lastVisit})
     const dispatch = useAppDispatch()
   
     useEffect(() => {

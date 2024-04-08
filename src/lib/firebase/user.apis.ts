@@ -12,7 +12,8 @@ export const addNewUser = async (userLite: User | AdapterUser) => {
     let docSnap = await getDoc(userDoc)
 
     if (!docSnap.exists()) {
-        const user : UserType = {
+        // User default values with init values
+        const user : UserType = { 
             uid,
             email,
             displayName,

@@ -29,7 +29,7 @@ const authOptions : NextAuthOptions = {
       return token
     },
     session: async ({session, token ,}) => {
-      // (session as any).accessToken = token?.accessToken;
+      // adding user id to session to get when we need it for identifying the user
       (session.user as any).id = token.sub
       return session
     }
