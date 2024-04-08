@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { PiCheckBold } from "react-icons/pi";
 import { MdMoreVert } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
@@ -8,8 +8,15 @@ import { PiArrowArcRightBold } from "react-icons/pi";
 import { GoGoal } from "react-icons/go";
 import Link from 'next/link';
 import { GoalDartIcon } from '../../public/icons';
+import { checkRoutine } from '@/redux/features/routinesSlice';
+import { UserType } from '@/types/user.type';
+import { useAppDispatch } from '@/redux/hooks';
 
-const RoutineCard = ({routine} : {routine : RoutineType}) => {
+const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) => {
+  const [checkLoading, setCheckLoading] = useState<boolean>(false)
+
+  const dispatch = useAppDispatch()
+
 	const menuItems = [
 		{
 			key: '1',
@@ -58,8 +65,33 @@ const RoutineCard = ({routine} : {routine : RoutineType}) => {
 		'medium' : 'volcano',
 		'low' : 'cyan',
  }
+
+  const onCheck = async () => {
+    setCheckLoading(true)
+    const {routineId} = routine
+    const {uid} = user
+    try{
+      await fetch('/api/firebase/check-routine', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          routineId,
+          uid,
+          message: ''
+        }),
+      })
+      dispatch(checkRoutine(routineId as string))
+    }catch(error: any){
+      console.log(error, 'Try again later')
+    }finally{
+      setCheckLoading(false)
+    }
+  }
+
   return (
-    <div className='w-[22rem] h-52 mt-10'>
+    <div className='w-[22rem] h-52 mt-12'>
       <Badge.Ribbon
         text={routine.priority.charAt(0).toUpperCase() + routine.priority.slice(1)}
         color={colorMap[routine.priority]}
@@ -76,8 +108,11 @@ const RoutineCard = ({routine} : {routine : RoutineType}) => {
             </div>
             <div className='flex justify-between'>
               <Button
+                loading={checkLoading}
                 icon={<PiCheckBold/>}
                 className='min-h-10 min-w-10 p-0'
+                onClick={onCheck}
+                disabled={routine.isSubmitted}
                 type='primary'/>
               <Button
                 color='cyan'
@@ -95,13 +130,12 @@ const RoutineCard = ({routine} : {routine : RoutineType}) => {
                 className='min-h-10 min-w-10 p-0'
                 type='primary'/>
       
-              <Dropdown menu={{items: menuItems}} placement="topRight">
+              <Dropdown menu={{items: menuItems}} placement="top">
                   <Button
                     type="text"
                     className="min-h-10 max-w-3"
                     icon={<MdMoreVert/>}
-                    >
-                  </Button>
+                    />
               </Dropdown>
             </div>
           </Flex>

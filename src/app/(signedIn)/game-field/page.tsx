@@ -36,7 +36,7 @@ const GameField = () => {
           reduxRoutines?.length === 0 ? 
             <h5>There is no routines add Routine</h5>
           :
-          reduxRoutines?.map((routine, key) => (<RoutineCard routine={routine} key={key}/>))
+          reduxRoutines?.map((routine, key) => (<RoutineCard user={user} routine={routine} key={key}/>))
         }
       </div>
     </div>
