@@ -1,4 +1,4 @@
-import { collection, addDoc, Timestamp, updateDoc, doc, getDocs, getDoc, setDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp, updateDoc, doc, getDocs, getDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import RoutineType, {RoutineDeliverableType} from "@/types/routine.type";
 import dayjs, { Dayjs } from "dayjs";
@@ -23,14 +23,35 @@ const fromDelivrableToLocleRoutine = (routine: RoutineDeliverableType) : Routine
     }
 }
 
+export const checkRoutineInFirebase = async (uid: string, routineId: string, message: string) => {
+    await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
+        combo: increment(1),
+        isSubmitted: true,
+        lastSubmit: serverTimestamp(),
+        message,
+    })
+    await updateDoc(doc(db, `/users`, uid), {
+        coins: increment(1),
+    })
+}
+
+export const getRoutineFromFirebase = async (uid: string, routineId: string) => {
+    let docSnap = await getDoc(doc(db, `users/${uid}/routines`, routineId));
+    if (!docSnap.exists()) {
+        throw new Error('This routine does not exist')
+    }
+    const routine = docSnap.data();
+    return routine
+}
+
 export const getRoutinesFromFirebase = async (uid : string,) => {
     const colRef = collection(db, `users/${uid}/routines`);
     const { docs } = await getDocs(colRef);
-    // return docs.map(doc => {
-    //     const routine : RoutineDeliverableType = {...doc.data(), routineId: doc.id} as RoutineDeliverableType
-    //     return fromDelivrableToLocleRoutine(routine)
-    // })
-    return docs.map(doc => ({...doc.data(), routineId : doc.id}))
+    return docs.map(doc => {
+        const routine : RoutineDeliverableType = {...doc.data(), routineId: doc.id} as RoutineDeliverableType
+        return fromDelivrableToLocleRoutine(routine)
+    })
+    // return docs.map(doc => ({...doc.data(), routineId : doc.id}))
 }
 
 export const addRoutineToFirebase = async (uid: string, routine : RoutineType,) => {

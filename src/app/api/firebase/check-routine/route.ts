@@ -4,6 +4,7 @@ import { NextApiRequest } from "next";
 import { NextRequest, NextResponse } from "next/server"
 import {z, ZodError} from 'zod'
 import { db } from "@/lib/firebase/firebaseConfig";
+import { checkRoutineInFirebase, getRoutineFromFirebase } from "@/lib/firebase/routine.apis";
 
 const schema = z.object({
     uid: z.string().max(50).min(1),
@@ -21,29 +22,13 @@ export const POST = async (request: NextRequest) => {
     try {
         const data : RequestBody = await request.json()
         schema.parse(data)
-
         const {uid, routineId, message} = data;
 
-        let docSnap = await getDoc(doc(db, `users/${uid}/routines`, routineId));
-
-        if (!docSnap.exists()) {
-            throw new Error('This routine does not exist')
-        }
-        const routine = docSnap.data();
-
+        const routine = await getRoutineFromFirebase(uid, routineId)
         if (routine.isSubmitted){
             throw new Error('This routine is already submitted')
         }
-
-        await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
-            combo: increment(1),
-            isSubmitted: true,
-            lastSubmit: serverTimestamp(),
-            message,
-        })
-        await updateDoc(doc(db, `/users`, uid), {
-            coins: increment(1),
-        })
+        await checkRoutineInFirebase(uid, routineId, message)
         return NextResponse.json({message: 'Routine checked successfully'}, {status: 200})
     }catch(error : any) {
         if (error instanceof ZodError) {

@@ -24,7 +24,6 @@ export default function RootLayout({
   const theme = {
     token: {
       colorPrimary: 'rgb(21, 128, 61)',
-
     },
   }
 
@@ -36,7 +35,7 @@ export default function RootLayout({
         <Providers>
           <NavigationBar/>
           <ConfigProvider theme={theme}>
-            {children}
+              {children}
           </ConfigProvider>
         </Providers>
       </body>

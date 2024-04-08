@@ -1,14 +1,6 @@
-// apiSlice.js
-import { getRoutinesFromFirebase } from '@/lib/firebase/routine.apis';
-import { getUserData } from '@/lib/firebase/user.apis';
-import { UserType } from '@/types/user.type';
-import { createApi, fakeBaseQuery, } from '@reduxjs/toolkit/query/react';
-import { User } from 'next-auth';
-import { AdapterUser } from 'next-auth/adapters';
-import { setRoutines } from '../features/routinesSlice';
-// import { db } from '@/lib/firebase/firebaseConfig'; // Import db object
 
-// const initial
+import { createApi, fakeBaseQuery, } from '@reduxjs/toolkit/query/react';
+
 
 export const fireStoreApi = createApi({
     reducerPath: 'firestoreApi',
@@ -17,18 +9,20 @@ export const fireStoreApi = createApi({
         getUser: builder.query<any, any>({
             queryFn: async ({user}) => {
                 if (!user) return {data : {}}
-                const data = await getUserData(user)
+                const res = await fetch(`/api/auth/user?uid=${user.id}`)
+                const data = await res.json()
                 return {data}
             }
         }),
         getRoutines: builder.query<Array<any>, {uid: string | undefined}>({
             queryFn: async ({uid}) => {
                 if (!uid) return {data : []}
-                const routines = await getRoutinesFromFirebase(uid)
-                return {data: routines}
+                const res = await fetch(`/api/firebase/routines?uid=${uid}`)
+                const data = await res.json()
+                return {data}
             },
         }),
     })
 })
 
-export const { useGetRoutinesQuery, useGetUserQuery } = fireStoreApi
+export const { useGetRoutinesQuery, useGetUserQuery} = fireStoreApi

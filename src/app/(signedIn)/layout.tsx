@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect , useState} from 'react'
+import React, { Suspense, useEffect , useState} from 'react'
 import UserBar from '@/components/user-bar.component';
 import { getSession, useSession } from 'next-auth/react'
 import { useGetUserQuery, useGetRoutinesQuery } from '@/redux/services/apiSlice'
@@ -8,10 +8,10 @@ import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 
-
 const SignedInLayout = ({ children }: Readonly<{
     children: React.ReactNode;
 }>) => {
+
     const {data: session, status} = useSession()
     const {data: user, isLoading: isUserLoading} = useGetUserQuery({user : session?.user})
     const {data: initRoutines, isLoading : isRoutinesLoading,} = useGetRoutinesQuery({ uid: user?.uid})

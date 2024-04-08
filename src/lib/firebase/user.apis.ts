@@ -29,10 +29,12 @@ export const addNewUser = async (userLite: User | AdapterUser) => {
     
 }
 
-export const getUserData = async (userLite :  User | AdapterUser) : Promise<UserType> => {
-
-    const { id: uid, } = userLite;
+export const getUserFromFirebase = async (uid: string) : Promise<UserType> => {
     const userDoc = doc(db, "users", uid);
     let docSnap = await getDoc(userDoc);
+
+    if (!docSnap.exists()) {
+        throw new Error('This user does not exist')
+    }
     return docSnap.data() as UserType;
 }
