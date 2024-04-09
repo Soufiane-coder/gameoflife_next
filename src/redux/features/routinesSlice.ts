@@ -17,10 +17,13 @@ export const routinesReducer = createSlice({
         checkRoutine: (state, action: PayloadAction<string>) => {
             const routineId = action.payload
             return state.map(routine => routine.routineId !== routineId ? routine : {...routine, isSubmitted: true})
+        },
+        removeRoutine: (state, action: PayloadAction<string>) => {
+            return state.filter(routine => routine.routineId !== action.payload)
         }
     }
 })
 
-export const { addRoutine, setRoutines, checkRoutine } = routinesReducer.actions;
+export const { addRoutine, setRoutines, checkRoutine, removeRoutine } = routinesReducer.actions;
 
 export default routinesReducer.reducer;

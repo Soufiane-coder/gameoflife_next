@@ -6,6 +6,14 @@
     --height-lp-section : 45rem;
 }
 
+
+::selection {
+	@apply bg-green-700;
+	border-radius: 5px;
+	color: white;
+}
+
+
 body{
     &::-webkit-scrollbar {
 		width: 13px;

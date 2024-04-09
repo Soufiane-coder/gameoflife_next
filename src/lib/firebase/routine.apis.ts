@@ -1,4 +1,4 @@
-import { collection, addDoc, Timestamp, updateDoc, doc, getDocs, getDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, Timestamp, updateDoc, doc, getDocs, getDoc, setDoc, increment, serverTimestamp, deleteDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import RoutineType, {RoutineDeliverableType} from "@/types/routine.type";
 import dayjs, { Dayjs } from "dayjs";
@@ -7,9 +7,9 @@ import dayjsToTimestamp, { TimestampToDayjs } from './utils'
 const fromLocalRoutineToDelivrable = (routine : RoutineType) : RoutineDeliverableType => {
     const routineDeliverable : RoutineDeliverableType = {
         ...routine,
-        lastSubmit: dayjsToTimestamp(routine.lastSubmit),
-        rangeTime: [dayjsToTimestamp(routine.rangeTime[0]), dayjsToTimestamp(routine.rangeTime[1])],
-        spentedTime: dayjsToTimestamp(routine.spentedTime)
+        lastSubmit: dayjsToTimestamp(dayjs(routine.lastSubmit)),
+        rangeTime: [dayjsToTimestamp(dayjs(routine.rangeTime[0])), dayjsToTimestamp(dayjs(routine.rangeTime[1]))],
+        spentedTime: dayjsToTimestamp(dayjs(routine.spentedTime))
     };
     return routineDeliverable;
 }
@@ -190,5 +190,9 @@ export const setComboToZeroInFirebase = async (uid: string, routineId: string) =
     await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
         combo: 0,
     })
+}
+
+export const deleteRoutineFromFirebase = async (uid: string, routineId: string) => {
+    await deleteDoc(doc(db, `/users/${uid}/routines/`, routineId));
 }
 

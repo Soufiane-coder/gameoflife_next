@@ -28,8 +28,8 @@ const AddRoutineModal = ({ open, setOpen, user }: any) => {
 		priority: PriorityType.LOW,
 		level: 1,
 		rangeTime: [
-			dayjs('00:00:00', 'HH:mm:ss'),
-			dayjs('00:00:00', 'HH:mm:ss'),
+			dayjs(0),
+			dayjs(0),
 		],
 		days: daysSchedule.map(day => day.value),
 		emoji: "",
@@ -47,8 +47,18 @@ const AddRoutineModal = ({ open, setOpen, user }: any) => {
 	const onFinish = async (newRoutine: RoutineType) => {
 		newRoutine = { ...initialValues, ...newRoutine, bgEmojiColor, emoji }
 		try {
-			await addRoutineToFirebase(user.uid, newRoutine)
-			dispatch(addRoutine(newRoutine))
+			const res = await fetch('/api/firebase/add-routine', {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ 
+					uid: user.uid,
+					routine: newRoutine,
+				})
+			})
+			const routineId = await res.json()
+			dispatch(addRoutine({...newRoutine, routineId}))
 		}
 		catch (err) {
 			console.error(err)

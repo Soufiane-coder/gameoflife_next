@@ -34,9 +34,10 @@ interface AbstractRoutineType{
 }
 
 export default interface RoutineType extends AbstractRoutineType {
-    lastSubmit : Dayjs; // yyyy-mm-dd
-    rangeTime : [Dayjs,Dayjs]; // 'HH:mm:ss'
-    spentedTime : Dayjs;
+    // added string cause when i use fetch method dayjs turnt to string to be sent from user to server
+    lastSubmit : Dayjs | string; // yyyy-mm-dd
+    rangeTime : [Dayjs,Dayjs] | [string, string]; // 'HH:mm:ss'
+    spentedTime : Dayjs | string;
 }
 
 export interface RoutineDeliverableType extends AbstractRoutineType {
