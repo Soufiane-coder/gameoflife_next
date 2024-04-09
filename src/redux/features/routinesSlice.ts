@@ -20,10 +20,18 @@ export const routinesReducer = createSlice({
         },
         removeRoutine: (state, action: PayloadAction<string>) => {
             return state.filter(routine => routine.routineId !== action.payload)
+        },
+        editRoutine: (state, action :PayloadAction<RoutineType>) => {
+            return state.map((routine : RoutineType) => {
+                if (routine.routineId === action.payload.routineId) {
+                  routine = {...action.payload}
+                }
+                return routine;
+              });
         }
     }
 })
 
-export const { addRoutine, setRoutines, checkRoutine, removeRoutine } = routinesReducer.actions;
+export const { addRoutine, setRoutines, checkRoutine, removeRoutine, editRoutine } = routinesReducer.actions;
 
 export default routinesReducer.reducer;

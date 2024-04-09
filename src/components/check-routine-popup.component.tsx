@@ -15,7 +15,6 @@ interface PropsType {
 }
 
 const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} : PropsType) => {
-
     const dispatch = useAppDispatch()
     const [message, setMessage ] = useState<string>("")
     const onOk = async () => {

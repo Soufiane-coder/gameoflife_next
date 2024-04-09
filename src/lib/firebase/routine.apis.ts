@@ -49,8 +49,7 @@ export const getRoutinesFromFirebase = async (uid : string,) => {
     const { docs } = await getDocs(colRef);
     return docs.map(doc => {
         const routine : RoutineDeliverableType = {...doc.data(), routineId: doc.id} as RoutineDeliverableType
-        return routine
-        // return fromDelivrableToLocleRoutine(routine)
+        return fromDelivrableToLocleRoutine(routine)
     })
     // return docs.map(doc => ({...doc.data(), routineId : doc.id}))
 }
@@ -156,7 +155,7 @@ export const addTimeToSpentedTime = async (uid : string, routineId: string, spen
     // }
 }
 
-export const uncheckAllRoutinesBelongToUserInFirebase = async (uid : string , routines : RoutineDeliverableType[]) => {
+export const uncheckAllRoutinesBelongToUserInFirebase = async (uid : string , routines : RoutineType[]) => {
     const uncheckRoutine = async (routineId : string) => {
         return await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
             isSubmitted: false,

@@ -13,14 +13,17 @@ import { ContextHolderMessage, ContextHolderNotification } from '@/app/providers
 import { deleteRoutineFromFirebase } from '@/lib/firebase/routine.apis';
 import { removeRoutine } from '@/redux/features/routinesSlice';
 import { useAppDispatch } from '@/redux/hooks';
+import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 
 interface PopupsType {
   checkPopup: boolean,
+  editPopup: boolean
 }
 
 const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) => {
-  const init = {
-    checkPopup: false
+  const init : PopupsType = {
+    checkPopup: false,
+    editPopup: false
   }
   const [loading, setLoading] = useState<PopupsType>(init)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
@@ -52,6 +55,10 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 		finally{
 			setDeleteLoading(false)
 		}
+  }
+
+  const handleEditRoutine = async () => {
+    setPopups(old => ({...old, editPopup: true}))
   }
 
   const onRemove = () => {
@@ -96,13 +103,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 		},
 		{
 			key: '2',
-			label: (
-			<a 
-        // onClick={handleEditRoutine}
-        >
-				Edit
-			</a>
-			),
+			label: (<p onClick={handleEditRoutine}>Edit</p>),
 		},
 		{
 			key: '3',
@@ -114,13 +115,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 		},
 		{
 			key: '4',
-			label: (
-			<a  
-        onClick={onRemove}
-        >
-				Delete
-			</a>
-			),
+			label: (<p onClick={onRemove}>Delete</p>),
 		},
 	];
 
@@ -186,6 +181,12 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
           </Flex>
         </Card>
       </Badge.Ribbon>
+      <AddRoutineModal
+        user={user}
+        routineToEdit={routine}
+        open={popups.editPopup}
+        setOpen={(etat: boolean) => setPopups(old => ({...old, editPopup: etat}))}
+      />
       <CheckRoutinePopup
         user={user}
         routine={routine}

@@ -2,10 +2,12 @@ import { setComboToZeroInFirebase, uncheckAllRoutinesBelongToUserInFirebase, Upd
 import { TimestampToDayjs } from "@/lib/firebase/utils";
 import RoutineType, { RoutineDeliverableType } from "@/types/routine.type";
 import { UserType } from "@/types/user.type";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { Timestamp } from "firebase/firestore";
 
-export const initialProtocol = async (uid: string, userSLastVisit: Timestamp, routines : RoutineDeliverableType[]) => {
+
+
+export const initialProtocol = async (uid: string, userSLastVisit: Timestamp, routines : RoutineType[]) => {
         // if users opject has been loaded from local storage then that function will
         // if(!userSLastVisit?.toDate) return;
         // not be in the scope so we wait until we get the object from database
@@ -26,7 +28,7 @@ export const initialProtocol = async (uid: string, userSLastVisit: Timestamp, ro
             if(combo === 0) return localRoutine;
     
             const currentDate = new Date();
-            const lastSubmitFormatted = new Date(lastSubmit.toDate()).toISOString().slice(0, 10);
+            const lastSubmitFormatted = new Date((lastSubmit as Dayjs).toDate()).toISOString().slice(0, 10);
     
             if (lastSubmitFormatted === currentDate.toISOString().slice(0, 10)) return localRoutine;
     

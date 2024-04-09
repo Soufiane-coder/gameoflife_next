@@ -1,7 +1,8 @@
-import { addRoutineToFirebase } from "@/lib/firebase/routine.apis";
-import RoutineType from "@/types/routine.type";
+import { editRoutineInFirebase } from "@/lib/firebase/routine.apis";
 import { NextRequest, NextResponse } from "next/server";
 import { z, ZodError } from "zod";
+
+import RoutineType from "@/types/routine.type"
 
 const validateLevel = (val : any) => {
     if (![0, 1, 2, 3, 4, 5].includes(val)) {
@@ -26,7 +27,7 @@ const validateDays = (val: any) => {
 }
 
 const schema = z.object({
-    uid: z.string().max(255).min(1),
+    uid: z.string().max(50).min(1),
     routine : z.object({
         title : z.string().max(266).min(1),
         description: z.string().max(266).min(1),
@@ -54,12 +55,12 @@ export const PUT = async (req: NextRequest) => {
     try{
         const data : ReqType = await req.json()
         schema.parse(data)
-        const routineId = await addRoutineToFirebase(data.uid, data.routine as RoutineType)
-        return NextResponse.json(routineId, {status: 201})
-    }catch(error: any){
-        if (error instanceof ZodError) {
-            return NextResponse.json({message: "Validation Error", errors: error.errors}, {status : 400})
+        await editRoutineInFirebase(data.uid, data.routine as RoutineType)
+        return NextResponse.json({message: 'Routine edited successfully'}, {status: 200})
+    }catch(error : any){
+        if(error instanceof ZodError){
+            return NextResponse.json({message: 'Validation Error', errors: error.errors}, {status: 400})
         }
-        return NextResponse.json({message: 'Internal Server Error', error}, {status: 500})
+        return NextResponse.json({message: 'Internal server error', error}, {status: 500})
     }
 }
