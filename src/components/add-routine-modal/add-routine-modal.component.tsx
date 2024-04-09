@@ -18,7 +18,7 @@ interface PropsType {
 	open: boolean;
 	setOpen: (etat: boolean) => void;
 	user: UserType;
-	routineToEdit: RoutineType
+	routineToEdit ?: RoutineType
 }
 
 const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
@@ -29,7 +29,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 	const [loading, setLoading] = useState<boolean>(false)
 	const dispatch = useAppDispatch();
 
-	const initialValues: RoutineType = {...routineToEdit} || {
+	const initialValues: RoutineType = routineToEdit ? {...routineToEdit} : {
 		title: "",
 		description: "",
 		message: "",

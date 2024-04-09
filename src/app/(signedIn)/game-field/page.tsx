@@ -26,10 +26,10 @@ const GameField = () => {
           onClick={() => setOpenAddRoutine(true)}>
           Add routine
         </Button>
-        <AddRoutineModal {...{
-          open: openAddRoutine, 
-          user,
-          setOpen: setOpenAddRoutine}}/>
+        <AddRoutineModal
+          open={openAddRoutine}
+          user={user as UserType}
+          setOpen={setOpenAddRoutine}/>
       </div>
       <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
         {
