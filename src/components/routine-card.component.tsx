@@ -144,8 +144,8 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
         <Card className='w-[22rem] h-52'>
           <span className='absolute text-5xl top-0 left-1/2 -translate-y-1/2 -translate-x-1/2 p-1 h-20 w-20 flex justify-center items-center rounded-md border  ' style={{backgroundColor: routine.bgEmojiColor}}>{deleteLoading ? <Spin/> : routine.emoji}</span>
           <Flex gap='small' vertical={true}>
-            <h5 className='mt-4 text-2xl font-semibold'>{routine.title}</h5>
-            <p>{routine.description}</p>
+            <h5 className='mt-4 text-2xl font-semibold max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>{routine.title}</h5>
+            <p className='max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>{routine.description}</p>
             <div className='flex justify-between p-1 border-b-2'>
               <span>{routine.combo !== 0 && `🔥${routine.combo}`}</span>
               <span>{routine.skip !== 0 && `⏭${routine.skip}`}</span>
