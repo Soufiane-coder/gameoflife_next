@@ -134,7 +134,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
   }
 
   return (
-    <div className='w-[22rem] h-52 mt-12'>
+    <div className='w-[22rem] h-52 mt-16'>
       <Badge.Ribbon
         text={routine.priority.charAt(0).toUpperCase() + routine.priority.slice(1)}
         color={colorMap[routine.priority]}

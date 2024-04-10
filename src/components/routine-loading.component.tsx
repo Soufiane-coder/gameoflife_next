@@ -10,7 +10,7 @@ import { GoGoal } from "react-icons/go";
 
 const RoutineLoading = () => {
   return (
-    <div className='w-[22rem] h-52 mt-12'>
+    <div className='w-[22rem] h-52 mt-16'>
         <Card
             loading={true}
           actions={[

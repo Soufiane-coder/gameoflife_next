@@ -8,6 +8,7 @@ import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchUser } from '@/redux/features/userSlice';
+import UserLoader from '@/components/user-loader/user-loader.layout';
 
 const SignedInLayout = ({ children }: Readonly<{
     children: React.ReactNode;
@@ -35,7 +36,7 @@ const SignedInLayout = ({ children }: Readonly<{
     
 
     if (status === 'loading' || loading || !user){
-        return (<h1>Loading user...</h1>)
+        return (<UserLoader/>)
     }
     return (
         <main className='p-2 md:pr-20'>
