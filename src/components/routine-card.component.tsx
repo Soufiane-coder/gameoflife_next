@@ -142,6 +142,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
         <Card 
           actions={[
             <Button
+                key='check'
                 loading={loading.checkPopup}
                 icon={<PiCheckBold/>}
                 className='min-h-10 min-w-10 p-0'
@@ -149,21 +150,24 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
                 disabled={routine.isSubmitted}
                 type='primary'/>,
               <Button
+                key='skip'
                 color='cyan'
                 icon={< PiArrowArcRightBold/>}
                 className='min-h-10 min-w-10 p-0'
                 type='primary'/>,
               <Button
+                key='message'
                 color='orange'
                 icon={<TbMessage/>}
                 className='min-h-10 min-w-10 p-0'
                 type='primary'/>,
               <Button
+                key='path-goal'
                 color='rose'
                 icon={<GoGoal/>}
                 className='min-h-10 min-w-10 p-0'
                 type='primary'/>,
-              <Dropdown menu={{items: menuItems}} placement="top">
+              <Dropdown menu={{items: menuItems}} placement="top" key='menu-other'>
                   <Button
                     type="text"
                     className='min-h-10 min-w-10 p-0'

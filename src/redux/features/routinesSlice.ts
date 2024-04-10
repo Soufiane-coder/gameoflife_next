@@ -1,35 +1,78 @@
 import RoutineType from "@/types/routine.type";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Timestamp } from "firebase/firestore";
 
+type RoutineInitType = {
+    loading: boolean,
+    routines?: RoutineType[],
+    error: string,
+}
 
-const initialState: RoutineType[] = []
+const routineInitialState : RoutineInitType = {
+    loading : false,
+    routines : undefined,
+    error: '', 
+}
+
+export const fetchRoutines = createAsyncThunk('routine/fetchRoutines', async ({uid, lastVisit}: {uid: string, lastVisit: Timestamp}) => {
+    const res = await fetch(`/api/firebase/routines`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            uid,
+            lastVisit,
+        }),
+    })
+    return await res.json()
+})
+
 
 export const routinesReducer = createSlice({
     name: 'routines',
-    initialState,
+    initialState : routineInitialState,
     reducers: {
         addRoutine: (state, action: PayloadAction<RoutineType>) => {
-            state.push(action.payload)
+            state.routines?.push(action.payload)
         },
         setRoutines: (state, action: PayloadAction<RoutineType[]>) => {
-            return action.payload
+            return {...state, routines: action.payload}
         },
         checkRoutine: (state, action: PayloadAction<string>) => {
             const routineId = action.payload
-            return state.map(routine => routine.routineId !== routineId ? routine : {...routine, isSubmitted: true})
+            const routines = state.routines?.map(routine => routine.routineId !== routineId ? routine : {...routine, isSubmitted: true})
+            return {...state, routines}
         },
         removeRoutine: (state, action: PayloadAction<string>) => {
-            return state.filter(routine => routine.routineId !== action.payload)
+            const routines = state.routines?.filter(routine => routine.routineId !== action.payload)
+            return {...state, routines}
         },
         editRoutine: (state, action :PayloadAction<RoutineType>) => {
-            return state.map((routine : RoutineType) => {
+            const routines =  state.routines?.map((routine : RoutineType) => {
                 if (routine.routineId === action.payload.routineId) {
                   routine = {...action.payload}
                 }
                 return routine;
               });
+            return {...state, routines}
         }
-    }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchRoutines.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(fetchRoutines.fulfilled, (state, action : PayloadAction<RoutineType[]>) => {
+            state.loading = false;
+            state.routines = action.payload;
+            state.error = '';
+        });
+        builder.addCase(fetchRoutines.rejected, (state, action ) => {
+            state.loading = false;
+            state.routines = undefined;
+            state.error = action.error.message || 'Something went wrong';
+        });
+    },
 })
 
 export const { addRoutine, setRoutines, checkRoutine, removeRoutine, editRoutine } = routinesReducer.actions;

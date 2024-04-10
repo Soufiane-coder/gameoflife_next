@@ -11,7 +11,8 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(fireStoreApi.middleware),
+    })
+    // .concat(fireStoreApi.middleware),
 });
 
 setupListeners(store.dispatch)

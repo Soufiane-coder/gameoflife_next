@@ -7,30 +7,40 @@ import { UserType } from '@/types/user.type';
 import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
+import { fetchUser } from '@/redux/features/userSlice';
 
 const SignedInLayout = ({ children }: Readonly<{
     children: React.ReactNode;
 }>) => {
 
     const {data: session, status} = useSession()
-    const {data: user, isLoading: isUserLoading} = useGetUserQuery({user : session?.user})
-    const {data: initRoutines, isLoading : isRoutinesLoading,} = useGetRoutinesQuery({ uid: user?.uid, lastVisit: user?.lastVisit})
     const dispatch = useAppDispatch()
-  
+    let { user , loading, error} = useAppSelector((state) => state.userReducer)
+
     useEffect(() => {
-        if(initRoutines){
-          dispatch(setRoutines(initRoutines as RoutineType[]))
+        if((session?.user as any)?.id){
+            dispatch(fetchUser((session?.user as any).id as string))
         }
-      }, [initRoutines, dispatch])
+    }, [session, dispatch])
+
+
+    // const {data: user, isLoading: isUserLoading} = useGetUserQuery({user : session?.user})
+    // const {data: initRoutines, isLoading : isRoutinesLoading,} = useGetRoutinesQuery({ uid: user?.uid, lastVisit: user?.lastVisit})
+  
+    // useEffect(() => {
+    //     if(initRoutines){
+    //       dispatch(setRoutines(initRoutines as RoutineType[]))
+    //     }
+    //   }, [initRoutines, dispatch])
     
-    if (status === 'loading' || isUserLoading === true || Object.keys(user).length === 0){
-        return (<h1>Loading...</h1>)
+
+    if (status === 'loading' || loading || !user){
+        return (<h1>Loading user...</h1>)
     }
-   
     return (
         <main className='p-2 md:pr-20'>
-            <UserBar user={user}/>
-            {isRoutinesLoading ? <h1>Loading Routines ...</h1> : children}
+            <UserBar user={user as UserType}/>
+            {children}
         </main>
     )
 }

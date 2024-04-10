@@ -6,23 +6,42 @@ import { UserType } from '@/types/user.type'
 import { Button } from 'antd'
 import AddRoutineModal from '@/components/add-routine-modal/add-routine-modal.component'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
-import { setRoutines } from '@/redux/features/routinesSlice'
+import { fetchRoutines, setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import RoutineCard from '@/components/routine-card.component'
 import { Timestamp } from 'firebase/firestore'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import AddCategoryModal from '@/components/add-category-modal.component'
+import RoutineLoading from '@/components/routine-loading.component'
 
 const GameField = () => {
 
-  const {data: session} = useSession()
-  const {data: user} = useGetUserQuery({user: session?.user})
+  const { user } = useAppSelector((state) => state.userReducer)
+  const dispatch = useAppDispatch()
+  const {routines, loading, error} = useAppSelector((state) => state.routinesReducer)
   const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
   const [openAddCategory, setOpenAddCategory] = useState<boolean>(false)
-  const reduxRoutines = useAppSelector((state) => state.routines)
+  
+  useEffect(() => {
+    if(user){
+      dispatch(fetchRoutines({uid: user.uid, lastVisit: user.lastVisit}))
+    }
+  }, [user, dispatch])
+
+  if(loading || !routines){
+    return (
+    <>
+      <div className='min-h-20'></div>
+      <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
+      {
+        [5,6,7,8,9,10].map((_, key) => (<React.Fragment key={key}><RoutineLoading/></React.Fragment>))
+      }
+      </div>
+    </>)
+  }
   return (
     <div>
-      <div>
+      <div className='min-h-20'>
         <Button
           color='cyan'
           type='primary'
@@ -46,10 +65,13 @@ const GameField = () => {
       </div>
       <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
         {
-          reduxRoutines?.length === 0 ? 
+          routines.length === 0 ? 
             <h5>There is no routines add Routine</h5>
           :
-          reduxRoutines?.map((routine, key) => (<RoutineCard user={user} routine={routine} key={key}/>))
+          routines.map((routine, key) => (
+            <React.Fragment key={key}>
+              <RoutineCard user={user as UserType} routine={routine}/>
+            </React.Fragment>))
         }
       </div>
     </div>
