@@ -10,22 +10,35 @@ import { setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import RoutineCard from '@/components/routine-card.component'
 import { Timestamp } from 'firebase/firestore'
-
+import { IoIosAddCircleOutline } from "react-icons/io";
+import AddCategoryModal from '@/components/add-category-modal.component'
 
 const GameField = () => {
 
   const {data: session} = useSession()
   const {data: user} = useGetUserQuery({user: session?.user})
   const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
+  const [openAddCategory, setOpenAddCategory] = useState<boolean>(false)
   const reduxRoutines = useAppSelector((state) => state.routines)
   return (
     <div>
       <div>
         <Button
+          color='cyan'
+          type='primary'
+          onClick={() => setOpenAddCategory(true)}>
+          Add Category
+        </Button>
+        <Button
           type='primary'
           onClick={() => setOpenAddRoutine(true)}>
           Add routine
         </Button>
+        <AddCategoryModal
+          open={openAddCategory}
+          user={user as UserType}
+          setOpen={setOpenAddCategory}
+        />
         <AddRoutineModal
           open={openAddRoutine}
           user={user as UserType}

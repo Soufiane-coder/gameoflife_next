@@ -4,7 +4,7 @@ import "./globals.scss";
 import {description} from './description.js'
 import NavigationBar from "@/components/nav-bar/nav-bar.component";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, ThemeConfig } from "antd";
 import Providers from "./providers";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
@@ -21,9 +21,15 @@ export default function RootLayout({
     pageProps: any
   }>) {
 
-  const theme = {
+  const theme : ThemeConfig = {
+    // components: {
+    //   Card : {
+    //     padding: 0,
+    //   }
+    // },
     token: {
       colorPrimary: 'rgb(21, 128, 61)',
+      fontFamily: "'__Quicksand_68e9d9', '__Quicksand_Fallback_68e9d9'",
     },
   }
 

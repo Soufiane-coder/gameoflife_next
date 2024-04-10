@@ -1,8 +1,8 @@
 import React, {useContext, useState} from 'react'
 import { PiCheckBold } from "react-icons/pi";
-import { MdMoreVert } from "react-icons/md";
+import { MdMoreHoriz } from "react-icons/md";
 import { TbMessage } from "react-icons/tb";
-import { Card, Button, Flex, Dropdown, Badge, Space, Spin } from 'antd'
+import { Card, Button, Flex, Dropdown, Badge, Space, Spin, Typography } from 'antd'
 import RoutineType from '@/types/routine.type'
 import { PiArrowArcRightBold } from "react-icons/pi";
 import { GoGoal } from "react-icons/go";
@@ -15,10 +15,13 @@ import { removeRoutine } from '@/redux/features/routinesSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 
+
 interface PopupsType {
   checkPopup: boolean,
   editPopup: boolean
 }
+
+const { Text } = Typography
 
 const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) => {
   const init : PopupsType = {
@@ -115,7 +118,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 		},
 		{
 			key: '4',
-			label: (<p onClick={onRemove}>Delete</p>),
+			label: (<Text type='danger' onClick={onRemove}>Delete</Text>),
 		},
 	];
 
@@ -136,17 +139,49 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
         text={routine.priority.charAt(0).toUpperCase() + routine.priority.slice(1)}
         color={colorMap[routine.priority]}
       >
-        <Card className='w-[22rem] h-52'>
+        <Card 
+          actions={[
+            <Button
+                loading={loading.checkPopup}
+                icon={<PiCheckBold/>}
+                className='min-h-10 min-w-10 p-0'
+                onClick={onCheck}
+                disabled={routine.isSubmitted}
+                type='primary'/>,
+              <Button
+                color='cyan'
+                icon={< PiArrowArcRightBold/>}
+                className='min-h-10 min-w-10 p-0'
+                type='primary'/>,
+              <Button
+                color='orange'
+                icon={<TbMessage/>}
+                className='min-h-10 min-w-10 p-0'
+                type='primary'/>,
+              <Button
+                color='rose'
+                icon={<GoGoal/>}
+                className='min-h-10 min-w-10 p-0'
+                type='primary'/>,
+              <Dropdown menu={{items: menuItems}} placement="top">
+                  <Button
+                    type="text"
+                    className='min-h-10 min-w-10 p-0'
+                    icon={<MdMoreHoriz/>}
+                    />
+              </Dropdown>
+          ]}
+          className=''>
           <span className='absolute text-5xl top-0 left-1/2 -translate-y-1/2 -translate-x-1/2 p-1 h-20 w-20 flex justify-center items-center rounded-md border  ' style={{backgroundColor: routine.bgEmojiColor}}>{deleteLoading ? <Spin/> : routine.emoji}</span>
           <Flex gap='small' vertical={true}>
             <h5 className='mt-4 text-2xl font-semibold max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>{routine.title}</h5>
-            <p className='max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>{routine.description}</p>
-            <div className='flex justify-between p-1 border-b-2'>
+            <Text className='max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>AI {routine.description}</Text>
+            <div className='flex justify-between'>
               <span>{routine.combo !== 0 && `🔥${routine.combo}`}</span>
               <span>{routine.skip !== 0 && `⏭${routine.skip}`}</span>
               <span>🎚️{routine.level}</span>
             </div>
-            <div className='flex justify-between'>
+            {/* <div className='flex justify-between'>
               <Button
                 loading={loading.checkPopup}
                 icon={<PiCheckBold/>}
@@ -177,7 +212,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
                     icon={<MdMoreVert/>}
                     />
               </Dropdown>
-            </div>
+            </div> */}
           </Flex>
         </Card>
       </Badge.Ribbon>

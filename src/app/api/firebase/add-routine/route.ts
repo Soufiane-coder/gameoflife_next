@@ -39,7 +39,7 @@ const schema = z.object({
         skip: z.number().min(0),
         priority : z.custom(validatePriority),
         message: z.string().max(266),
-        emoji: z.string().max(2).min(0),
+        emoji: z.string().max(5).min(0),
         bgEmojiColor: z.string().max(50).min(1),
         character : z.string().max(50).min(0),
         lastSubmit: z.string(),
