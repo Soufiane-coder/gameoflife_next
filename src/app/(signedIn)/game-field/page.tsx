@@ -34,7 +34,7 @@ const GameField = () => {
       <div className='min-h-20'></div>
       <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
       {
-        [5,6,7,8,9,10].map((_, key) => (<React.Fragment key={key}><RoutineLoading/></React.Fragment>))
+        [5,6,7,8,].map((_, key) => (<React.Fragment key={key}><RoutineLoading/></React.Fragment>))
       }
       </div>
     </>)

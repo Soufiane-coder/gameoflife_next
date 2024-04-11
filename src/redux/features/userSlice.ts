@@ -37,7 +37,14 @@ export const userInitSlice = createSlice({
             state.error = action.error.message || 'Something went wrong';
         });
     },
-    reducers: {}
+    reducers: {
+        paySkip: (state) => {
+            const {user} = state
+            return {...state, user : user && {...user, coins: user.coins - 10}}
+        }
+    }
 })
+
+export const {paySkip} = userInitSlice.actions;
 
 export default userInitSlice.reducer;

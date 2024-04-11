@@ -56,6 +56,11 @@ export const routinesReducer = createSlice({
                 return routine;
               });
             return {...state, routines}
+        },
+        buySkip: (state, action: PayloadAction<string>) => {
+            const routineId = action.payload
+            const routines = state.routines?.map(routine => routine.routineId !== routineId ? routine : {...routine, skip: 1+routine.skip})
+            return {...state, routines}
         }
     },
     extraReducers: (builder) => {
@@ -75,6 +80,6 @@ export const routinesReducer = createSlice({
     },
 })
 
-export const { addRoutine, setRoutines, checkRoutine, removeRoutine, editRoutine } = routinesReducer.actions;
+export const { addRoutine, setRoutines, checkRoutine, removeRoutine, editRoutine, buySkip } = routinesReducer.actions;
 
 export default routinesReducer.reducer;

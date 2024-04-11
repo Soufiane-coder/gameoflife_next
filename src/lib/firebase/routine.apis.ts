@@ -28,6 +28,7 @@ export const checkRoutineInFirebase = async (uid: string, routineId: string, mes
         combo: increment(1),
         isSubmitted: true,
         lastSubmit: serverTimestamp(),
+        skip: increment(1),
         message,
     })
     await updateDoc(doc(db, `/users`, uid), {
@@ -195,3 +196,11 @@ export const deleteRoutineFromFirebase = async (uid: string, routineId: string) 
     await deleteDoc(doc(db, `/users/${uid}/routines/`, routineId));
 }
 
+export const buySkipFromFirebase = async (uid: string, routineId: string) => {
+    await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
+        skip: increment(1),
+    })
+    await updateDoc(doc(db, `/users`, uid), {
+        coins: increment(-10)
+    })
+}

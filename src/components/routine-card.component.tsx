@@ -14,8 +14,8 @@ import { deleteRoutineFromFirebase } from '@/lib/firebase/routine.apis';
 import { removeRoutine } from '@/redux/features/routinesSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
-
-
+import { buySkip } from '@/redux/features/routinesSlice';
+import { paySkip } from '@/redux/features/userSlice';
 interface PopupsType {
   checkPopup: boolean,
   editPopup: boolean
@@ -29,6 +29,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
     editPopup: false
   }
   const [loading, setLoading] = useState<PopupsType>(init)
+  const [skipLoading, setSkipLoading] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
   const [popups, setPopups] = useState<PopupsType>(init)
   const notificationApi = useContext(ContextHolderNotification)
@@ -128,6 +129,28 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 		'low' : 'cyan',
  }
 
+  const onSkip = async () => {
+    try{
+      setSkipLoading(true)
+      await fetch('/api/firebase/buy-skip', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          routineId: routine.routineId,
+        }),
+      })
+      dispatch(buySkip(routine.routineId as string))
+      dispatch(paySkip())
+    }catch(error){
+      console.error(error)
+    }finally{
+      setSkipLoading(false)
+    }
+  }
+
   const onCheck = async () => {
     setPopups(old => ({...old, checkPopup: true}))
 
@@ -152,8 +175,11 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
               <Button
                 key='skip'
                 color='cyan'
+                loading={skipLoading}
                 icon={< PiArrowArcRightBold/>}
                 className='min-h-10 min-w-10 p-0'
+                onClick={onSkip}
+                disabled={user.coins < 10}
                 type='primary'/>,
               <Button
                 key='message'
@@ -182,7 +208,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
             <Text className='max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>AI {routine.description}</Text>
             <div className='flex justify-between'>
               <span>{routine.combo !== 0 && `🔥${routine.combo}`}</span>
-              <span>{routine.skip !== 0 && `⏭${routine.skip}`}</span>
+              <span>{routine.skip !== 0 && `↩️${routine.skip}`}</span>
               <span>🎚️{routine.level}</span>
             </div>
             {/* <div className='flex justify-between'>

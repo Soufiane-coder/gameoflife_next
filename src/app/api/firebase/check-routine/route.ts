@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from "next/server"
 import {z, ZodError} from 'zod'
 import { db } from "@/lib/firebase/firebaseConfig";
 import { checkRoutineInFirebase, getRoutineFromFirebase } from "@/lib/firebase/routine.apis";
+import { getUserFromFirebase } from "@/lib/firebase/user.apis";
+
+const SKIP_PRICE = 10
 
 const schema = z.object({
     uid: z.string().max(50).min(1),
@@ -27,6 +30,11 @@ export const POST = async (request: NextRequest) => {
         const routine = await getRoutineFromFirebase(uid, routineId)
         if (routine.isSubmitted){
             throw new Error('This routine is already submitted')
+        }
+
+        const user = await getUserFromFirebase(uid)
+        if(user.coins < SKIP_PRICE){
+            throw new Error('Coins not sufficient to buy a skip')
         }
         await checkRoutineInFirebase(uid, routineId, message)
         return NextResponse.json({message: 'Routine checked successfully'}, {status: 200})
