@@ -2,11 +2,9 @@
 import { db } from "./firebaseConfig";
 import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { UserType } from "@/types/user.type";
-import { User, } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
 
 
-export const addNewUser = async (userLite: User | AdapterUser) => {
+export const addNewUser = async (userLite: any) => {
     const { id: uid, email, image: photoURL, name: displayName} = userLite;
     const userDoc = doc(db, "users", uid);
     let docSnap = await getDoc(userDoc)

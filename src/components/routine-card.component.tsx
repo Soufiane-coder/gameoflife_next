@@ -16,6 +16,8 @@ import { useAppDispatch } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 import { buySkip } from '@/redux/features/routinesSlice';
 import { paySkip } from '@/redux/features/userSlice';
+import { useRouter } from 'next/navigation';
+
 interface PopupsType {
   checkPopup: boolean,
   editPopup: boolean
@@ -28,6 +30,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
     checkPopup: false,
     editPopup: false
   }
+  const router = useRouter()
   const [loading, setLoading] = useState<PopupsType>(init)
   const [skipLoading, setSkipLoading] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
@@ -192,6 +195,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
                 color='rose'
                 icon={<GoGoal/>}
                 className='min-h-10 min-w-10 p-0'
+                onClick={() => router.push(`/road-map/${routine.routineId}`)}
                 type='primary'/>,
               <Dropdown menu={{items: menuItems}} placement="top" key='menu-other'>
                   <Button
@@ -205,7 +209,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
           <span className='absolute text-5xl top-0 left-1/2 -translate-y-1/2 -translate-x-1/2 p-1 h-20 w-20 flex justify-center items-center rounded-md border  ' style={{backgroundColor: routine.bgEmojiColor}}>{deleteLoading ? <Spin/> : routine.emoji}</span>
           <Flex gap='small' vertical={true}>
             <h5 className='mt-4 text-2xl font-semibold max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>{routine.title}</h5>
-            <Text className='max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>AI {routine.description}</Text>
+            <Text className='max-w-full whitespace-nowrap overflow-hidden overflow-ellipsis'>{routine.description}</Text>
             <div className='flex justify-between'>
               <span>{routine.combo !== 0 && `🔥${routine.combo}`}</span>
               <span>{routine.skip !== 0 && `↩️${routine.skip}`}</span>

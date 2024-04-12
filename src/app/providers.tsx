@@ -17,7 +17,7 @@ const Providers : React.FC<PropsType> = ({children}) => {
   const [messageApi, contextHolderMessage] = message.useMessage();
 
   return (
-    <SessionProvider>
+    <SessionProvider refetchOnWindowFocus={false}>
       <Provider store={store}>
         <ContextHolderNotification.Provider value={notificationApi}>
           <ContextHolderMessage.Provider value={messageApi}>

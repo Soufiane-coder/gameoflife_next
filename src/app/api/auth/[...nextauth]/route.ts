@@ -2,7 +2,8 @@ import NextAuth from "next-auth"
 import GoogleProvider  from "next-auth/providers/google"
 import type { NextAuthOptions, Session } from "next-auth"
 import { addNewUser } from "@/lib/firebase/user.apis"
-import { AdapterUser } from "next-auth/adapters"
+import { randomBytes, randomUUID } from "crypto"
+
 
 const authOptions : NextAuthOptions = {
   // Configure one or more authentication providers
@@ -16,12 +17,13 @@ const authOptions : NextAuthOptions = {
   pages: {
     signIn : '/signin'
   },
+
   callbacks: {
     signIn : async ({user}) => {
       try{
         await addNewUser(user)
       }catch(err: any){
-        console.error(err)
+        console.error('firebase user error ', err)
       }
       return true
     },
