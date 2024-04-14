@@ -15,29 +15,28 @@ import AddCategoryModal from '@/components/add-category-modal.component'
 import RoutineLoading from '@/components/routine-loading.component'
 
 const GameField = () => {
-
   const { user } = useAppSelector((state) => state.userReducer)
   const dispatch = useAppDispatch()
-  const {routines, loading, error} = useAppSelector((state) => state.routinesReducer)
+  const { routines, loading, error } = useAppSelector((state) => state.routinesReducer)
   const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
   const [openAddCategory, setOpenAddCategory] = useState<boolean>(false)
-  
+
   useEffect(() => {
-    if(user){
-      dispatch(fetchRoutines({uid: user.uid, lastVisit: user.lastVisit}))
+    if (user) {
+      dispatch(fetchRoutines({ uid: user.uid, lastVisit: user.lastVisit }))
     }
   }, [user, dispatch])
 
-  if(loading || !routines){
+  if (loading || !routines) {
     return (
-    <>
-      <div className='min-h-20'></div>
-      <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
-      {
-        [5,6,7,8,].map((_, key) => (<React.Fragment key={key}><RoutineLoading/></React.Fragment>))
-      }
-      </div>
-    </>)
+      <>
+        <div className='min-h-20'></div>
+        <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
+          {
+            [5, 6, 7, 8,].map((_, key) => (<React.Fragment key={key}><RoutineLoading /></React.Fragment>))
+          }
+        </div>
+      </>)
   }
   return (
     <div>
@@ -61,17 +60,17 @@ const GameField = () => {
         <AddRoutineModal
           open={openAddRoutine}
           user={user as UserType}
-          setOpen={setOpenAddRoutine}/>
+          setOpen={setOpenAddRoutine} />
       </div>
       <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
         {
-          routines.length === 0 ? 
+          routines.length === 0 ?
             <h5>There is no routines add Routine</h5>
-          :
-          routines.map((routine, key) => (
-            <React.Fragment key={key}>
-              <RoutineCard user={user as UserType} routine={routine}/>
-            </React.Fragment>))
+            :
+            routines.map((routine, key) => (
+              <React.Fragment key={key}>
+                <RoutineCard user={user as UserType} routine={routine} />
+              </React.Fragment>))
         }
       </div>
     </div>

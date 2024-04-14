@@ -30,7 +30,6 @@ export const addNewUser = async (userLite: any) => {
 export const getUserFromFirebase = async (uid: string) : Promise<UserType> => {
     const userDoc = doc(db, "users", uid);
     let docSnap = await getDoc(userDoc);
-
     if (!docSnap.exists()) {
         throw new Error('This user does not exist')
     }

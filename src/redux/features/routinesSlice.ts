@@ -41,7 +41,7 @@ export const routinesReducer = createSlice({
         },
         checkRoutine: (state, action: PayloadAction<string>) => {
             const routineId = action.payload
-            const routines = state.routines?.map(routine => routine.routineId !== routineId ? routine : {...routine, isSubmitted: true})
+            const routines = state.routines?.map(routine => routine.routineId !== routineId ? routine : {...routine, combo: routine.combo + 1, isSubmitted: true}) 
             return {...state, routines}
         },
         removeRoutine: (state, action: PayloadAction<string>) => {

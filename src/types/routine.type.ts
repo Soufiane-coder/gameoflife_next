@@ -21,7 +21,7 @@ interface AbstractRoutineType{
     title : string;
     description  : string;
     level  : 0 | 1 | 2 | 3 | 4 | 5;
-    combo  : 0;
+    combo  : number;
     isSubmitted  : boolean;
     isArchived : boolean;
     skip : number;

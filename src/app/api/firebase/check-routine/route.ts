@@ -31,12 +31,8 @@ export const POST = async (request: NextRequest) => {
         if (routine.isSubmitted){
             throw new Error('This routine is already submitted')
         }
-
-        const user = await getUserFromFirebase(uid)
-        if(user.coins < SKIP_PRICE){
-            throw new Error('Coins not sufficient to buy a skip')
-        }
         await checkRoutineInFirebase(uid, routineId, message)
+
         return NextResponse.json({message: 'Routine checked successfully'}, {status: 200})
     }catch(error : any) {
         if (error instanceof ZodError) {
