@@ -1,6 +1,25 @@
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, addDoc, Timestamp } from "firebase/firestore";
 import { db } from "./firebaseConfig";
-import { GoalType } from "@/types/routine.type";
+import { GoalStatus, GoalType, GoalTypeAttrs } from "@/types/routine.type";
+
+interface GoalLite {
+    created: string;
+    type: GoalTypeAttrs;
+    description: string;
+    label: string;
+}
+
+export const addNewGoalToFirebase = async (uid: string, routineId : string, goal: GoalLite) => {
+    const colRef = collection(db, `users/${uid}/routines/${routineId}/goals`);
+    const newGoal = { 
+        ...goal,
+        status: GoalStatus.WAITING,
+        created:  Timestamp.fromDate(new Date("2024-04-18T20:46:31.711Z")),
+    }
+    const { id: goalId } = await addDoc(colRef, newGoal);
+    return goalId;
+}
+
 
 export const getGoalsOfRoutine = async (uid : string, routineId : string,) : Promise<GoalType[]> => {
     // todo make sure that the user and routine are already exists

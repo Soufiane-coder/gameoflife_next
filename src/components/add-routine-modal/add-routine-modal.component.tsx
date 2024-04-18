@@ -156,7 +156,9 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 				labelCol={{ span: 5 }}
 				wrapperCol={{ span: 18 }}
 				form={form}
-				initialValues={initialValues} layout="horizontal" onFinish={routineToEdit ? onFinishEditing : onFinishAdding} name="userForm">
+				initialValues={initialValues} layout="horizontal" onFinish={routineToEdit ? onFinishEditing : onFinishAdding}
+				name={routineToEdit ? routineToEdit.routineId : 'Add routine form'}>
+				{/* name is used for not throwing error when you open more form with the same name */}
 				<Form.Item name="title" label="Title"
 					rules={[{ required: true, message: 'Please input the title!' }]}>
 					<Input />

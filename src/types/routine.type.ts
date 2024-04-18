@@ -7,10 +7,16 @@ export enum GoalStatus {
     SKIPPED = 'SKIPPED',
     WAITING = 'WAITING',
 }
+
+export enum GoalTypeAttrs {
+    SUBGOAL = 'SUBGOAL',
+    SMALLGOAL = 'SMALLGOAL',
+    BIGGOAL = 'BIGGOAL',
+}
 export interface GoalType {
     label: string;
-    goalId: string;
-    type: 'sub-goal' | 'small-goal' | 'big-goal';
+    goalId?: string;
+    type: GoalTypeAttrs;
     description : string;
     status: GoalStatus;
 }

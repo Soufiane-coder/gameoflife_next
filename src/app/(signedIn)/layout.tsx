@@ -39,7 +39,7 @@ const SignedInLayout = ({ children }: Readonly<{
         return (<UserLoader/>)
     }
     return (
-        <main className='p-2 md:pr-20'>
+        <main className='p-2 md:pr-20 min-h-full'>
             <UserBar user={user as UserType}/>
             {children}
         </main>
