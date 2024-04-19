@@ -42,7 +42,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
     setDeleteLoading(true);
 		try{
       notificationApi.destroy()
-			await fetch(`api/firebase/delete-routine?uid=${user.uid}&routineId=${routineId}`, {
+			await fetch(`/api/firebase/delete-routine?uid=${user.uid}&routineId=${routineId}`, {
         method: 'DELETE'
       })
       dispatch(removeRoutine(routineId as string))
@@ -50,8 +50,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 				type: 'success',
 				content: 'Item deleted',
 			})
-		}
-		catch(err){
+		} catch(err){
 			console.error(err)
 			messageApi.open({
 				type: 'error',

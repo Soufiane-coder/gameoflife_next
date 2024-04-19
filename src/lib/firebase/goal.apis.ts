@@ -1,4 +1,4 @@
-import { collection, getDocs, orderBy, query, addDoc, Timestamp } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, addDoc, Timestamp, deleteDoc, doc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { GoalStatus, GoalType, GoalTypeAttrs } from "@/types/routine.type";
 
@@ -11,13 +11,17 @@ interface GoalLite {
 
 export const addNewGoalToFirebase = async (uid: string, routineId : string, goal: GoalLite) => {
     const colRef = collection(db, `users/${uid}/routines/${routineId}/goals`);
-    const newGoal = { 
+    const newGoal = {
         ...goal,
         status: GoalStatus.WAITING,
-        created:  Timestamp.fromDate(new Date("2024-04-18T20:46:31.711Z")),
+        created:  Timestamp.fromDate(new Date(goal.created)),
     }
     const { id: goalId } = await addDoc(colRef, newGoal);
     return goalId;
+}
+
+export const deleteGoalFromFirebase = async (uid : string, routineId : string, goalId: string) => {
+    await deleteDoc(doc(db, `/users/${uid}/routines/${routineId}/goals`, goalId));
 }
 
 
