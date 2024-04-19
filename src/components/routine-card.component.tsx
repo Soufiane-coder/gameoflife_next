@@ -10,12 +10,11 @@ import Link from 'next/link';
 import { UserType } from '@/types/user.type';
 import CheckRoutinePopup from './check-routine-popup.component';
 import { ContextHolderMessage, ContextHolderNotification } from '@/app/providers';
-import { deleteRoutineFromFirebase } from '@/lib/firebase/routine.apis';
 import { removeRoutine } from '@/redux/features/routinesSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 import { buySkip } from '@/redux/features/routinesSlice';
-import { paySkip } from '@/redux/features/userSlice';
+import { paySkip, } from '@/redux/features/userSlice';
 import { useRouter } from 'next/navigation';
 
 interface PopupsType {

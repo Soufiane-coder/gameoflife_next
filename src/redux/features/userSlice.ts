@@ -41,10 +41,14 @@ export const userInitSlice = createSlice({
         paySkip: (state) => {
             const {user} = state
             return {...state, user : user && {...user, coins: user.coins - 10}}
+        },
+        addCoin: (state) => {
+            const {user} = state
+            return {...state, user: user && {...user, coins: user.coins + 1}}
         }
     }
 })
 
-export const {paySkip} = userInitSlice.actions;
+export const {paySkip, addCoin} = userInitSlice.actions;
 
 export default userInitSlice.reducer;

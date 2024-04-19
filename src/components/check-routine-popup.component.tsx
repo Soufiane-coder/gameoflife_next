@@ -4,6 +4,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { checkRoutine } from '@/redux/features/routinesSlice';
 import RoutineType from '@/types/routine.type';
 import { UserType } from '@/types/user.type';
+import { addCoin } from '@/redux/features/userSlice';
 
 interface PropsType {
     open: boolean;
@@ -34,6 +35,7 @@ const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} :
                 }),
             })
             dispatch(checkRoutine(routineId as string))
+            dispatch(addCoin())
         }catch(error: any){
             console.log(error, 'Try again later')
         }finally{
