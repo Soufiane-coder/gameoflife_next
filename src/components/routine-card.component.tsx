@@ -16,10 +16,12 @@ import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 import { buySkip } from '@/redux/features/routinesSlice';
 import { paySkip, } from '@/redux/features/userSlice';
 import { useRouter } from 'next/navigation';
+import MessageModal from './message-modal.component';
 
 interface PopupsType {
   checkPopup: boolean,
-  editPopup: boolean
+  editPopup: boolean,
+  message: boolean,
 }
 
 const { Text } = Typography
@@ -27,7 +29,8 @@ const { Text } = Typography
 const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) => {
   const init : PopupsType = {
     checkPopup: false,
-    editPopup: false
+    editPopup: false,
+    message: false,
   }
   const router = useRouter()
   const [loading, setLoading] = useState<PopupsType>(init)
@@ -186,6 +189,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
                 key='message'
                 color='orange'
                 icon={<TbMessage/>}
+                onClick={() => setPopups(old => ({...old, message: true}))}
                 className='min-h-10 min-w-10 p-0'
                 type='primary'/>,
               <Button
@@ -253,6 +257,11 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
         routineToEdit={routine}
         open={popups.editPopup}
         setOpen={(etat: boolean) => setPopups(old => ({...old, editPopup: etat}))}
+      />
+      <MessageModal
+        message={routine?.message}
+        open={popups.message}
+        setOpen={(etat: boolean) => setPopups(old => ({...old, message: etat}))}
       />
       <CheckRoutinePopup
         user={user}

@@ -5,6 +5,8 @@ import { checkRoutine } from '@/redux/features/routinesSlice';
 import RoutineType from '@/types/routine.type';
 import { UserType } from '@/types/user.type';
 import { addCoin } from '@/redux/features/userSlice';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'
 
 interface PropsType {
     open: boolean;
@@ -18,6 +20,8 @@ interface PropsType {
 const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} : PropsType) => {
     const dispatch = useAppDispatch()
     const [message, setMessage ] = useState<string>("")
+   const [editorHtml, setEditorHtml] = useState('')
+
     const onOk = async () => {
         setLoading(true)
         const {routineId} = routine
@@ -31,7 +35,7 @@ const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} :
                 body: JSON.stringify({
                     routineId,
                     uid,
-                    message,
+                    message : editorHtml,
                 }),
             })
             dispatch(checkRoutine(routineId as string))
@@ -52,10 +56,14 @@ const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} :
         confirmLoading={loading}
         onOk={onOk}
     >
-
         <Flex gap='small' vertical={true}>
             <p> Write a message for future you to motivate, noting the progress or planing the next step</p>
-            <Input value={message} onChange={(event) => setMessage(event.target.value)}/>
+            {/* <Input value={message} onChange={(event) => setMessage(event.target.value)}/> */}
+            <ReactQuill
+                theme="snow" // 'snow' for the default toolbar
+                value={editorHtml}
+                onChange={setEditorHtml}
+            />
         </Flex>
     </Modal>
   )
