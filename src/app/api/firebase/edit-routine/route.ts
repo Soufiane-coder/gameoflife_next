@@ -55,6 +55,7 @@ export const PUT = async (req: NextRequest) => {
     try{
         const data : ReqType = await req.json()
         schema.parse(data)
+        console.log(data.routine)
         await editRoutineInFirebase(data.uid, data.routine as RoutineType)
         return NextResponse.json({message: 'Routine edited successfully'}, {status: 200})
     }catch(error : any){

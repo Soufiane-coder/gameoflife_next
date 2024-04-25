@@ -5,48 +5,46 @@ import { checkRoutine } from '@/redux/features/routinesSlice';
 import RoutineType from '@/types/routine.type';
 import { UserType } from '@/types/user.type';
 import { addCoin } from '@/redux/features/userSlice';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'
-
 interface PropsType {
     open: boolean;
     setOpen: (etat: boolean) => void;
-    setLoading: (etat: boolean) => void;
     user: UserType;
     routine: RoutineType;
-    loading: boolean;
 }
 
-const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} : PropsType) => {
-    const dispatch = useAppDispatch()
+const CheckRoutinePopup = ({open, setOpen, user, routine} : PropsType) => {
     const [message, setMessage ] = useState<string>("")
-   const [editorHtml, setEditorHtml] = useState('')
+    const [loading, setLoading] = useState<boolean>(false)
+    const dispatch = useAppDispatch()
 
-    const onOk = async () => {
+    const onOk = () => {
         setLoading(true)
         const {routineId} = routine
-        const {uid} = user
-        try{
-            await fetch('/api/firebase/check-routine', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    routineId,
-                    uid,
-                    message : editorHtml,
-                }),
-            })
-            dispatch(checkRoutine(routineId as string))
-            dispatch(addCoin())
-        }catch(error: any){
-            console.log(error, 'Try again later')
-        }finally{
-            setLoading(false)
-            setMessage('')
-            setOpen(false)
-        }
+        const {uid} = user;
+        (async () => {
+            try{ 
+                const res = await fetch('/api/firebase/check-routine', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        routineId,
+                        uid,
+                        message,
+                    }),
+                })
+                console.log((await res.json()).message) 
+                dispatch(checkRoutine(routineId as string))
+                dispatch(addCoin())
+            }catch(error: any){
+                console.log(error, 'Try again later')
+            }finally{
+                setLoading(false)
+                setMessage('')
+                setOpen(false)
+            }
+        })()
     }
   return (
     <Modal
@@ -59,11 +57,6 @@ const CheckRoutinePopup = ({open, setOpen, loading, setLoading, user, routine} :
         <Flex gap='small' vertical={true}>
             <p> Write a message for future you to motivate, noting the progress or planing the next step</p>
             {/* <Input value={message} onChange={(event) => setMessage(event.target.value)}/> */}
-            <ReactQuill
-                theme="snow" // 'snow' for the default toolbar
-                value={editorHtml}
-                onChange={setEditorHtml}
-            />
         </Flex>
     </Modal>
   )

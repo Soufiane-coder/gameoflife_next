@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { UserType } from '@/types/user.type';
 import CheckRoutinePopup from './check-routine-popup.component';
 import { ContextHolderMessage, ContextHolderNotification } from '@/app/providers';
-import { removeRoutine } from '@/redux/features/routinesSlice';
+import { checkRoutine, removeRoutine } from '@/redux/features/routinesSlice';
 import { useAppDispatch } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 import { buySkip } from '@/redux/features/routinesSlice';
@@ -33,7 +33,6 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
     message: false,
   }
   const router = useRouter()
-  const [loading, setLoading] = useState<PopupsType>(init)
   const [skipLoading, setSkipLoading] = useState<boolean>(false)
   const [deleteLoading, setDeleteLoading] = useState<boolean>(false)
   const [popups, setPopups] = useState<PopupsType>(init)
@@ -157,7 +156,6 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 
   const onCheck = async () => {
     setPopups(old => ({...old, checkPopup: true}))
-
   }
 
   return (
@@ -170,7 +168,6 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
           actions={[
             <Button
                 key='check'
-                loading={loading.checkPopup}
                 icon={<PiCheckBold/>}
                 className='min-h-10 min-w-10 p-0'
                 onClick={onCheck}
@@ -266,8 +263,6 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
       <CheckRoutinePopup
         user={user}
         routine={routine}
-        loading={loading.checkPopup}
-        setLoading={(etat: boolean) => setLoading(old => ({...old, checkPopup: etat}))}
         open={popups.checkPopup}
         setOpen={(etat: boolean) => setPopups(old => ({...old, checkPopup: etat}))}/>
     </div>

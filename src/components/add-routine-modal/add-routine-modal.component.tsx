@@ -11,8 +11,6 @@ import Picker from '@emoji-mart/react'
 import randomColor from 'randomcolor'
 import styled from '@/components/add-routine-modal/add-routine-modal.module.scss'
 import { UserType } from '@/types/user.type'
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 
 const { TextArea } = Input
 
@@ -86,6 +84,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 	const onFinishEditing = async (newRoutine: RoutineType) => {
 		newRoutine = { ...initialValues, ...newRoutine, bgEmojiColor, emoji }
 		try{
+			setLoading(true)
 			await fetch('/api/firebase/edit-routine', {
 				method: 'PUT',
                 headers: {

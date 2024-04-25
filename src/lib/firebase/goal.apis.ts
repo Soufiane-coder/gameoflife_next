@@ -1,4 +1,4 @@
-import { collection, getDocs, orderBy, query, addDoc, Timestamp, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, addDoc, Timestamp, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { GoalStatus, GoalType, GoalTypeAttrs } from "@/types/routine.type";
 
@@ -24,6 +24,11 @@ export const deleteGoalFromFirebase = async (uid : string, routineId : string, g
     await deleteDoc(doc(db, `/users/${uid}/routines/${routineId}/goals`, goalId));
 }
 
+export const checkGoalInFirabase = async (uid : string, routineId: string, goalId: string) => {
+    await updateDoc(doc(db, `/users/${uid}/routines/${routineId}/goals`, goalId), {
+        status: GoalStatus.DONE,
+    })
+}
 
 export const getGoalsOfRoutine = async (uid : string, routineId : string,) : Promise<GoalType[]> => {
     // todo make sure that the user and routine are already exists
