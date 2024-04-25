@@ -84,6 +84,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 	const onFinishEditing = async (newRoutine: RoutineType) => {
 		newRoutine = { ...initialValues, ...newRoutine, bgEmojiColor, emoji }
 		try{
+			setLoading(true)
 			await fetch('/api/firebase/edit-routine', {
 				method: 'PUT',
                 headers: {

@@ -8,6 +8,9 @@ import { PiPlusCircleBold } from "react-icons/pi";
 import AddGoalModal from './add-goal-modal.component'
 import { MdDeleteOutline } from "react-icons/md";
 import { ContextHolderNotification } from '@/app/providers'
+import { FaCheck } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 
 const RoadPath = ({routineId} : {routineId: string}) => {
@@ -16,6 +19,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
     const [goals, setGoals] = useState<GoalType[] | null>(null)
     const [goalModal, setGoalModal] = useState<boolean>(false)
     const [selectedGoal, setSelectedGoal] = useState<GoalType | null>(null)
+    const [loadingCheck, setLoadingCheck] = useState<boolean>(false)
 
     useEffect(() => {
         if(!goals){
@@ -85,6 +89,35 @@ const RoadPath = ({routineId} : {routineId: string}) => {
 		})
     }
 
+    const onCheck = async () => {
+        try{
+            setLoadingCheck(true)
+            await fetch('/api/firebase/check-goal', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    uid : user?.uid,
+                    routineId,
+                    goalId: selectedGoal?.goalId,
+                }),
+            })
+            setGoals(old => {
+                return (old ?? []).map(goal => {
+                    if (goal.goalId === selectedGoal?.goalId){
+                        goal.status = GoalStatus.DONE
+                    }
+                    return goal
+                })
+            })
+        }catch(error){
+            console.error(error)
+        }finally{
+            setLoadingCheck(false)
+        }
+    }
+
     const handleAddGoal = () => {
         setGoalModal(true)
     }
@@ -94,7 +127,9 @@ const RoadPath = ({routineId} : {routineId: string}) => {
                 className='w-96 max-h-[92rem]'
                 title='Your path road'
                 actions={[
-                    <MdDeleteOutline onClick={onDelete} key='delete' className='h-6 w-6 m-auto' />,
+                    <Button type='primary' className='h-6 w-6 p-0'  key='check' onClick={onCheck} icon={<FaCheck />} />,
+                    <Button type='primary' color='cyan' className='h-6 w-6 p-0' key='edit' icon={<FaEdit/>} />,
+                    <Button type='primary' color='red' onClick={onDelete} key='delete' className='h-6 w-6 m-auto p-0' icon={<FaRegTrashAlt />} />,
                     // <EditOutlined key="edit" />,
                     // <EllipsisOutlined key="ellipsis" />,
                   ]}
@@ -106,11 +141,11 @@ const RoadPath = ({routineId} : {routineId: string}) => {
                     items={
                         goals.map((goal) : TimelineItemProps  => {
                             return {
-                                label: <h1 onClick={() => setSelectedGoal(goal)} className={`capitalize cursor-pointer ${goal.goalId === selectedGoal?.goalId && 'font-bold'}`}>{goal.label}</h1>,
+                                label: <h5 onClick={() => setSelectedGoal(goal)} className={`capitalize cursor-pointer ${goal.goalId === selectedGoal?.goalId && 'font-bold'}`}>{goal.label}</h5>,
                                 color: goal.goalId === selectedGoal?.goalId ? 'black' : statusMap[goal.status],
                                 children: <p className='capitalize'>{goal.description}</p>
                             }
-                        }).concat([{dot : <PiPlusCircleBold className='cursor-pointer text-xl' onClick={handleAddGoal}/>,label: <h1 className='capitalize'>Add Routine</h1>, color : 'pink', children: <></>, pending: true}])
+                        }).concat([{dot : <PiPlusCircleBold className='cursor-pointer text-xl' onClick={handleAddGoal}/>,label: <h6 className='capitalize'>Add Routine</h6>, color : 'pink', children: <></>, pending: true}])
                     }
                 />
                 {

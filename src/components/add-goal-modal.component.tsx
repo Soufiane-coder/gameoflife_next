@@ -27,7 +27,7 @@ const AddGoalModal : React.FC<PropsType> = ({open, setOpen, uid, setGoals, routi
         newGoal = {...initialValues, ...newGoal, created: dayjs(new Date())}
         setLoading(true)
         try{
-            await fetch('/api/firebase/add-goal', {
+            const goalId = await fetch('/api/firebase/add-goal', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -38,6 +38,7 @@ const AddGoalModal : React.FC<PropsType> = ({open, setOpen, uid, setGoals, routi
                     goal: newGoal,
                 })
             })
+            setGoals((old) => old && [...old, {...newGoal, goalId}])
         }catch(err){
             console.error(err)
         }finally{
@@ -45,7 +46,7 @@ const AddGoalModal : React.FC<PropsType> = ({open, setOpen, uid, setGoals, routi
             form.resetFields()
             setOpen(false)
         }
-        setGoals((old) => old && [...old, {...newGoal}])
+        
     }
 
     const onOk = () => {

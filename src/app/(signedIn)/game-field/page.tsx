@@ -9,7 +9,6 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { fetchRoutines, setRoutines } from '@/redux/features/routinesSlice'
 import RoutineType from '@/types/routine.type'
 import RoutineCard from '@/components/routine-card.component'
-import { Timestamp } from 'firebase/firestore'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import AddCategoryModal from '@/components/add-category-modal.component'
 import RoutineLoading from '@/components/routine-loading.component'
@@ -25,7 +24,7 @@ const GameField = () => {
     if (user) {
       dispatch(fetchRoutines({ uid: user.uid, lastVisit: user.lastVisit }))
     }
-  }, [user, dispatch])
+  }, [dispatch])
 
   if (loading || !routines) {
     return (

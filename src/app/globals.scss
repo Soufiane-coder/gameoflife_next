@@ -33,8 +33,47 @@ body{
 	}
 }
 
-.h2{
-	@apply text-3xl font-semibold text-gray-800
+.h1, h1 {
+	@apply text-4xl font-bold text-gray-900; /* Apply Tailwind utility classes */
+}
+  
+.h2, h2{
+	@apply text-3xl font-semibold text-gray-900
+}
+
+.h3, h3 {
+	@apply text-xl font-semibold text-gray-900; /* Apply Tailwind utility classes */
+}
+
+.h4, h4 {
+	@apply text-lg font-medium text-gray-900; /* Apply Tailwind utility classes */
+}
+
+.h5, h5 {
+	@apply text-base font-normal text-gray-900; /* Apply Tailwind utility classes */
+}
+  
+.h6, h6 {
+	@apply text-sm font-light text-gray-900; /* Apply Tailwind utility classes */
+}
+
+/* For ordered lists */
+ol {
+	@apply list-decimal pl-6; /* Apply Tailwind utility classes */
+}
+
+/* For list items */
+ol li {
+	@apply text-base font-normal text-gray-900; /* Apply Tailwind utility classes */
+}
+
+ul {
+	@apply list-disc pl-6; /* Apply Tailwind utility classes */
+  }
+  
+/* For list items */
+ul li {
+	@apply text-base font-normal text-gray-900; /* Apply Tailwind utility classes */
 }
 
 #body {
