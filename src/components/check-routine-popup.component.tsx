@@ -56,7 +56,7 @@ const CheckRoutinePopup = ({open, setOpen, user, routine} : PropsType) => {
     >
         <Flex gap='small' vertical={true}>
             <p> Write a message for future you to motivate, noting the progress or planing the next step</p>
-            {/* <Input value={message} onChange={(event) => setMessage(event.target.value)}/> */}
+            <Input placeholder={routine.message} value={message} onChange={(event) => setMessage(event.target.value)}/>
         </Flex>
     </Modal>
   )
