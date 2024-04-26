@@ -29,9 +29,10 @@ const validateDays = (val: any) => {
 const schema = z.object({
     uid: z.string().max(50).min(1),
     routine : z.object({
-        title : z.string().max(266).min(1),
-        description: z.string().max(266).min(1),
-        categoryId: z.string().max(266).min(0),
+        routineId: z.string().max(255).min(1),
+        title : z.string().max(255).min(1),
+        description: z.string().max(255).min(1),
+        categoryId: z.string().max(255).min(0),
         level : z.custom(validateLevel),
         combo : z.number().min(0),
         isSubmitted : z.boolean(),
@@ -39,7 +40,7 @@ const schema = z.object({
         days : z.custom(validateDays),
         skip: z.number().min(0),
         priority : z.custom(validatePriority),
-        message: z.string().max(266),
+        message: z.string().max(255),
         emoji: z.string().min(0),
         bgEmojiColor: z.string().max(50).min(1),
         character : z.string().max(50).min(0),
@@ -55,7 +56,6 @@ export const PUT = async (req: NextRequest) => {
     try{
         const data : ReqType = await req.json()
         schema.parse(data)
-        console.log(data.routine)
         await editRoutineInFirebase(data.uid, data.routine as RoutineType)
         return NextResponse.json({message: 'Routine edited successfully'}, {status: 200})
     }catch(error : any){

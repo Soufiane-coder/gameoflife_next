@@ -62,11 +62,10 @@ export const addRoutineToFirebase = async (uid: string, routine : RoutineType,) 
     return routineId;
 }
 
-export const editRoutineInFirebase = async (uid: string ,routine : RoutineType) => {
+export const editRoutineInFirebase = async (uid: string , routine : RoutineType) => {
     const routineDeliverable = fromLocalRoutineToDelivrable(routine)
-    const {routineId} = routineDeliverable;
-    
-    const selectedRoutine = doc(db, `/users/${uid}/routines/${routineId}`);
+    const { routineId } = routineDeliverable;
+    const selectedRoutine = doc(db, `users/${uid}/routines/`, routineId as string);
     await updateDoc(selectedRoutine, {
         ...routineDeliverable
     })
