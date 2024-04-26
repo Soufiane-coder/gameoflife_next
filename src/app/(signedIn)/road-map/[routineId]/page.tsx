@@ -3,7 +3,7 @@ import React from 'react'
 
 const RoadMap = ({params}: {params: {routineId: string}}) => {
   return (
-    <div className='min-h-full'>
+    <div className='h-[90lvh] max-h-lvh flex justify-center'>
       <RoadPath routineId={params.routineId}/>
     </div>
   )

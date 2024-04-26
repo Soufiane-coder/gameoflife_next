@@ -1,7 +1,7 @@
 "use client"
 import { useAppSelector } from '@/redux/hooks'
 import { GoalStatus, GoalType } from '@/types/routine.type'
-import { Card, Timeline, TimelineItemProps,  Popconfirm, Space, Button } from 'antd'
+import { Card, Timeline, TimelineItemProps,  Popconfirm, Space, Button, Progress } from 'antd'
 import { LiteralUnion } from 'next-auth/react'
 import React, { useEffect, useMemo, useState, useContext } from 'react'
 import { PiPlusCircleBold } from "react-icons/pi";
@@ -19,6 +19,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
     const [goals, setGoals] = useState<GoalType[] | null>(null)
     const [goalModal, setGoalModal] = useState<boolean>(false)
     const [selectedGoal, setSelectedGoal] = useState<GoalType | null>(null)
+    const [statisticGaol, setStatisticGaol] = useState({countDoneGoals : 0})
     const [loadingCheck, setLoadingCheck] = useState<boolean>(false)
 
     useEffect(() => {
@@ -38,6 +39,8 @@ const RoadPath = ({routineId} : {routineId: string}) => {
             const selected = goals?.find((goal) => {
                 return goal.status == GoalStatus.WAITING && goal
             }) as GoalType;
+            const countDoneGoals = goals?.reduce((acc, goal) => goal?.status === GoalStatus.DONE ? acc + 1 : acc, 0)
+            setStatisticGaol({countDoneGoals})
             setSelectedGoal(selected)
         }
     }, [goals])
@@ -90,6 +93,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
     }
 
     const onCheck = async () => {
+        if(!selectedGoal || selectedGoal.status === GoalStatus.DONE) return
         try{
             setLoadingCheck(true)
             await fetch('/api/firebase/check-goal', {
@@ -122,10 +126,12 @@ const RoadPath = ({routineId} : {routineId: string}) => {
         setGoalModal(true)
     }
     return (
-        <>
+        <>  
             <Card
-                className='w-96 max-h-[92rem]'
-                title='Your path road'
+                className='w-96 max-h-full overflow-y-auto'
+                title={
+                    goals?.length !== 0 ? <Progress percent={Math.floor(statisticGaol.countDoneGoals/goals?.length* 100)}/> : 'Add goals'
+                }
                 actions={[
                     <Button type='primary' className='h-6 w-6 p-0'  key='check' onClick={onCheck} icon={<FaCheck />} />,
                     <Button type='primary' color='cyan' className='h-6 w-6 p-0' key='edit' icon={<FaEdit/>} />,
@@ -135,6 +141,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
                   ]}
                 // extra={<a href="#">More</a>}
                 >
+                
                 <Timeline
                     mode='left'
                     reverse={true}
