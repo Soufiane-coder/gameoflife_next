@@ -1,6 +1,7 @@
-import { collection, getDocs, orderBy, query, addDoc, Timestamp, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, addDoc, Timestamp, deleteDoc, doc, updateDoc, where, limit, getDoc } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { GoalStatus, GoalType, GoalTypeAttrs } from "@/types/routine.type";
+import { get } from "firebase/database";
 
 interface GoalLite {
     created: string;
@@ -29,6 +30,22 @@ export const checkGoalInFirabase = async (uid : string, routineId: string, goalI
         status: GoalStatus.DONE,
     })
 }
+
+// export const getWaitingGoal = async (uid: string, routineId: string) => {
+//     const colRef = collection(db, `users/${uid}/routines/${routineId}/goals`);
+//     const q0 = query(colRef, where('status', '==', 'WAITING'))
+//     const q = query(q0,  
+//         orderBy('created'),
+//     )
+//     console.log('fired')
+//     // const q2 = query(q, limit(1))
+//     const {docs} = await getDocs(q);
+//     // console.log('fired', docs[0].data())
+//     return docs.map(doc => ({
+//         ...doc.data(),
+//         goalId: doc.id,
+//     }) as GoalType)
+// }
 
 export const getGoalsOfRoutine = async (uid : string, routineId : string,) : Promise<GoalType[]> => {
     // todo make sure that the user and routine are already exists

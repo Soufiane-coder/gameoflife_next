@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useGetRoutinesQuery, useGetUserQuery } from '@/redux/services/apiSlice'
 import { UserType } from '@/types/user.type'
-import { Button } from 'antd'
+import { Button, Select } from 'antd'
 import AddRoutineModal from '@/components/add-routine-modal/add-routine-modal.component'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks'
 import { fetchRoutines, setRoutines } from '@/redux/features/routinesSlice'
@@ -12,6 +12,7 @@ import RoutineCard from '@/components/routine-card.component'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import AddCategoryModal from '@/components/add-category-modal.component'
 import RoutineLoading from '@/components/routine-loading.component'
+import { selectFilterOptions } from './utils'
 
 const GameField = () => {
   const { user } = useAppSelector((state) => state.userReducer)
@@ -37,8 +38,20 @@ const GameField = () => {
         </div>
       </>)
   }
+
+  
+
   return (
     <div>
+      <div>
+        <Select
+					options={selectFilterOptions}
+					defaultValue={selectFilterOptions[selectFilterOptions.length - 1]}
+					placeholder="select attribute..."
+					style={{minWidth: '15rem'}}
+					// onChange={setSelectedFilterOption}
+				/>
+      </div>
       <div className='min-h-20'>
         <Button
           color='cyan'
