@@ -1,8 +1,9 @@
-import { collection, addDoc, Timestamp, updateDoc, doc, getDocs, getDoc, setDoc, increment, serverTimestamp, deleteDoc } from "firebase/firestore";
+import { collection, addDoc, Timestamp, updateDoc, doc, getDocs, getDoc, setDoc, increment, serverTimestamp, deleteDoc, arrayUnion } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import RoutineType, {RoutineDeliverableType} from "@/types/routine.type";
 import dayjs, { Dayjs } from "dayjs";
 import dayjsToTimestamp, { TimestampToDayjs } from './utils'
+import StatisticsType from "@/types/statistics.type";
 
 const fromLocalRoutineToDelivrable = (routine : RoutineType) : RoutineDeliverableType => {
     const routineDeliverable : RoutineDeliverableType = {
@@ -34,6 +35,24 @@ export const checkRoutineInFirebase = async (uid: string, routineId: string, mes
     await updateDoc(doc(db, `/users`, uid), {
         coins: increment(1),
     })
+
+    const today = dayjs().format().split("T")[0]
+    
+    const statisticsRef = doc(db, `users/${uid}/statistics`, today);
+
+    const docSnap = await getDoc(statisticsRef)
+
+    if (!docSnap.exists()) {
+        await setDoc(statisticsRef, {
+            day: today,
+            checkedRoutines: [routineId],
+        } as StatisticsType);
+    }
+    else {
+        await updateDoc(statisticsRef, {
+            checkedRoutines: arrayUnion(routineId)
+        })
+    }
 }
 
 export const getRoutineFromFirebase = async (uid: string, routineId: string) => {
