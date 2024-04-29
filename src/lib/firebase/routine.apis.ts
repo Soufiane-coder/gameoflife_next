@@ -29,7 +29,6 @@ export const checkRoutineInFirebase = async (uid: string, routineId: string, mes
         combo: increment(1),
         isSubmitted: true,
         lastSubmit: serverTimestamp(),
-        skip: increment(1),
         message,
     })
     await updateDoc(doc(db, `/users`, uid), {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Input, Flex, Checkbox } from 'antd'
+import { Modal, Input, Flex, Checkbox, Button } from 'antd'
 import { useAppDispatch } from '@/redux/hooks';
 import { checkRoutine } from '@/redux/features/routinesSlice';
 import RoutineType, { GoalStatus, GoalType } from '@/types/routine.type';
 import { UserType } from '@/types/user.type';
 import { addCoin } from '@/redux/features/userSlice';
+import Link from 'next/link';
 interface PropsType {
     open: boolean;
     setOpen: (etat: boolean) => void;
@@ -15,7 +16,7 @@ interface PropsType {
 const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
     const [message, setMessage] = useState<string>("")
     const [loading, setLoading] = useState<boolean>(false)
-    const [goal, setGoal] = useState<GoalType|null>(null)
+    const [goal, setGoal] = useState<GoalType|undefined>(undefined)
     const [checkGoal, setCheckgoal] = useState<boolean>(false)
     const dispatch = useAppDispatch()
 
@@ -26,7 +27,7 @@ const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
                 const goals = await res.json() as GoalType[]
                 const selected = goals?.find((goal) => {
                     return goal.status == GoalStatus.WAITING && goal
-                }) as GoalType;
+                });
                 setGoal(selected)
             }
         })()
@@ -84,7 +85,9 @@ const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
         >
             <Flex gap='small' vertical={true}>
                 <p> Write a message for future you to motivate, noting the progress or planing the next step</p>
-                <Checkbox checked={checkGoal} onChange={(event) => setCheckgoal(event?.target.checked)}>{goal?.label}</Checkbox>
+                {
+                    goal === undefined ? <p>Add goals <Link href={`/road-map/${routine.routineId}`} >here</Link></p> : <Checkbox checked={checkGoal} onChange={(event) => setCheckgoal(event?.target.checked)}>{goal?.label}</Checkbox>
+                }
                 <Input.TextArea placeholder={routine.message} value={message} onChange={(event) => setMessage(event.target.value)} />
             </Flex>
         </Modal>

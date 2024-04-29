@@ -32,7 +32,6 @@ export const POST = async (request: NextRequest) => {
             throw new Error('This routine is already submitted')
         }
         await checkRoutineInFirebase(uid, routineId, message)
-
         return NextResponse.json({message: 'Routine checked successfully'}, {status: 200})
     }catch(error : any) {
         if (error instanceof ZodError) {

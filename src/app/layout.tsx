@@ -6,6 +6,7 @@ import NavigationBar from "@/components/nav-bar/nav-bar.component";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
 import Providers from "./providers";
+import Script from "next/script";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -35,6 +36,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7175718056472732"
+     crossOrigin="anonymous"></Script>
+      </head>
       <AntdRegistry >
       <body id="body" className={`${quicksand.className} bg-gray-50 `}>
         {/* Providers contains some client side componenet providers (session,)  */}
