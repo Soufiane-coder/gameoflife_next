@@ -22,7 +22,8 @@ const GameField = () => {
   const [openAddCategory, setOpenAddCategory] = useState<boolean>(false)
 
   useEffect(() => {
-    if (user) {
+    if (user && !routines) { 
+      // the !routines is in the case that routines array is already loaded to no re-fetch
       dispatch(fetchRoutines({ uid: user.uid, lastVisit: user.lastVisit }))
     }
   }, [dispatch])
@@ -74,14 +75,14 @@ const GameField = () => {
           user={user as UserType}
           setOpen={setOpenAddRoutine} />
       </div>
-      <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
+      <div className='grid justify-center justify-items-center gap-5 grid-cols-grid-routine-card-cols'>
         {
           routines.length === 0 ?
             <h5>There is no routines add Routine</h5>
             :
             routines.map((routine, key) => (
               <React.Fragment key={key}>
-                <RoutineCard user={user as UserType} routine={routine} />
+                <RoutineCard routine={routine} />
               </React.Fragment>))
         }
       </div>

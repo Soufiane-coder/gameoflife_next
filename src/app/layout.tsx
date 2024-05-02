@@ -37,8 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7175718056472732"
-     crossOrigin="anonymous"></Script>
+        {
+          process.env.NODE_ENV === 'production' && <Script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7175718056472732"
+          crossOrigin="anonymous"></Script>
+        }
+        
       </head>
       <AntdRegistry >
       <body id="body" className={`${quicksand.className} bg-gray-50 `}>

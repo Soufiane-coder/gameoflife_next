@@ -7,16 +7,16 @@ import RoutineType from '@/types/routine.type'
 import { PiArrowArcRightBold } from "react-icons/pi";
 import { GoGoal } from "react-icons/go";
 import Link from 'next/link';
-import { UserType } from '@/types/user.type';
 import CheckRoutinePopup from './check-routine-popup.component';
 import { ContextHolderMessage, ContextHolderNotification } from '@/app/providers';
 import { checkRoutine, removeRoutine } from '@/redux/features/routinesSlice';
-import { useAppDispatch } from '@/redux/hooks';
+import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 import { buySkip } from '@/redux/features/routinesSlice';
 import { paySkip, } from '@/redux/features/userSlice';
 import { useRouter } from 'next/navigation';
 import MessageModal from './message-modal.component';
+import { UserType } from '@/types/user.type';
 
 interface PopupsType {
   checkPopup: boolean,
@@ -26,7 +26,7 @@ interface PopupsType {
 
 const { Text } = Typography
 
-const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) => {
+const RoutineCard = ({routine} : {routine : RoutineType}) => {
   const init : PopupsType = {
     checkPopup: false,
     editPopup: false,
@@ -38,13 +38,14 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
   const [popups, setPopups] = useState<PopupsType>(init)
   const notificationApi = useContext(ContextHolderNotification)
   const messageApi = useContext(ContextHolderMessage)
+  const {user} = useAppSelector(state => state.userReducer)
   const dispatch = useAppDispatch()
 
   const handleRemoveRoutine = async (routineId: string) => {
     setDeleteLoading(true);
 		try{
       notificationApi.destroy()
-			await fetch(`/api/firebase/delete-routine?uid=${user.uid}&routineId=${routineId}`, {
+			await fetch(`/api/firebase/delete-routine?uid=${user?.uid}&routineId=${routineId}`, {
         method: 'DELETE'
       })
       dispatch(removeRoutine(routineId as string))
@@ -101,7 +102,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 			label: (
 			<a onClick={async (event) => {
 				event.preventDefault();
-				// await setArchivedOptionInFirebase(user.uid, routine.routineId, !routine.isArchived)
+				// await setArchivedOptionInFirebase(?uid, routine.routineId, !routine.isArchived)
 				// setArchivedOption(routine.routineId, !routine.isArchived)
 			}}>
 				{routine.isArchived ? "Desarchive" : "Archive"}
@@ -112,17 +113,25 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 			key: '2',
 			label: (<p onClick={handleEditRoutine}>Edit</p>),
 		},
-		{
+    {
 			key: '3',
 			label: (
-        <Link  href={'/focus-mode/' + routine.routineId}>
-          Focus mode
+        <Link  href={`/routine/${routine.routineId}/statistic`}>
+          Statistic
         </Link>
 			),
 		},
 		{
 			key: '4',
-			label: (<Text type='danger' onClick={onRemove}>Delete</Text>),
+			label: (
+        <Link  href={`/routine/${routine.routineId}/focus-mode`}>
+          Focus mode
+        </Link>
+			),
+		},
+		{
+			key: '5',
+			label: (<p onClick={onRemove}><Text type='danger'>Delete</Text></p>),
 		},
 	];
 
@@ -130,7 +139,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
 		'important': 'red',
 		'medium' : 'volcano',
 		'low' : 'cyan',
- }
+  }
 
   const onSkip = async () => {
     try{
@@ -141,7 +150,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          uid: user.uid,
+          uid: user?.uid,
           routineId: routine.routineId,
         }),
       })
@@ -180,7 +189,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
                 icon={< PiArrowArcRightBold/>}
                 className='min-h-10 min-w-10 p-0'
                 onClick={onSkip}
-                disabled={user.coins < 10}
+                disabled={user && user.coins < 10}
                 type='primary'/>,
               <Button
                 key='message'
@@ -250,7 +259,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
         </Card>
       </Badge.Ribbon>
       <AddRoutineModal
-        user={user}
+        user={user as UserType}
         routineToEdit={routine}
         open={popups.editPopup}
         setOpen={(etat: boolean) => setPopups(old => ({...old, editPopup: etat}))}
@@ -261,7 +270,7 @@ const RoutineCard = ({routine, user} : {routine : RoutineType, user: UserType}) 
         setOpen={(etat: boolean) => setPopups(old => ({...old, message: etat}))}
       />
       <CheckRoutinePopup
-        user={user}
+        user={user as UserType}
         routine={routine}
         open={popups.checkPopup}
         setOpen={(etat: boolean) => setPopups(old => ({...old, checkPopup: etat}))}/>
