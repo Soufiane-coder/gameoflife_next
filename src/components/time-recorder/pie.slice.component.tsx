@@ -1,6 +1,12 @@
 import React from 'react';
 
-const PieSlice = ({ radius, startAngle, endAngle, fill }) => {
+interface PropsType {
+  radius: number;
+  startAngle: number;
+  endAngle: number;
+  fill: string
+}
+const PieSlice = ({ radius, startAngle, endAngle, fill } : PropsType) => {
     const x1 = radius * Math.cos((Math.PI / 180) * startAngle);
     const y1 = radius * Math.sin((Math.PI / 180) * startAngle);
     const x2 = radius * Math.cos((Math.PI / 180) * endAngle);
