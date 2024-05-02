@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchUser } from '@/redux/features/userSlice';
 import UserLoader from '@/components/user-loader/user-loader.layout';
 
-const routineLayout = ({ children, params }: Readonly<{
+const RoutineLayout = ({ children, params }: Readonly<{
     children: React.ReactNode;
     params: {routineId: string}
 }>) => {
@@ -35,4 +35,4 @@ const routineLayout = ({ children, params }: Readonly<{
     return children
 }
 
-export default routineLayout
+export default RoutineLayout
