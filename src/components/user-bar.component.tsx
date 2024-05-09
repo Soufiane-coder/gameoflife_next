@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import { UserType } from '@/types/user.type'
 import { Avatar, Badge } from 'antd'

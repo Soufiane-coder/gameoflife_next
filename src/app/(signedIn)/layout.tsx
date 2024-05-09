@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import React, { Suspense, useEffect , useState} from 'react'
 import UserBar from '@/components/user-bar.component';
 import { getSession, useSession } from 'next-auth/react'
@@ -9,20 +9,23 @@ import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchUser } from '@/redux/features/userSlice';
 import UserLoader from '@/components/user-loader/user-loader.layout';
+import { getServerSession } from 'next-auth';
+import authOptions from '../api/auth/[...nextauth]/authOptions';
 
-const SignedInLayout = ({ children }: Readonly<{
+const SignedInLayout = async ({ children }: Readonly<{
     children: React.ReactNode;
 }>) => {
+    const session = await getServerSession(authOptions)
+    // console.log({session: session.toJSON()})
+    // const {data: session, status} = useSession()
+    // const dispatch = useAppDispatch()
+    // let { user , loading, error} = useAppSelector((state) => state.userReducer)
 
-    const {data: session, status} = useSession()
-    const dispatch = useAppDispatch()
-    let { user , loading, error} = useAppSelector((state) => state.userReducer)
-
-    useEffect(() => {
-        if((session?.user as any)?.id){
-            dispatch(fetchUser((session?.user as any).id as string))
-        }
-    }, [session, dispatch])
+    // useEffect(() => {
+    //     if((session?.user as any)?.id){
+    //         dispatch(fetchUser((session?.user as any).id as string))
+    //     }
+    // }, [session, dispatch])
 
 
     // const {data: user, isLoading: isUserLoading} = useGetUserQuery({user : session?.user})
@@ -35,13 +38,13 @@ const SignedInLayout = ({ children }: Readonly<{
     //   }, [initRoutines, dispatch])
     
 
-    if (status === 'loading' || loading || !user){
-        return (<UserLoader/>)
-    }
+    // if (status === 'loading' || loading || !user){
+    //     return (<UserLoader/>)
+    // }
     return (
         <main className='p-2 md:pr-20 min-h-full'>
-            <UserBar user={user as UserType}/>
-            {children}
+            <UserBar user={session?.user as UserType}/>
+            {/* {children} */}
         </main>
     )
 }

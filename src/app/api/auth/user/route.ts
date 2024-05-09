@@ -1,5 +1,7 @@
 import { getUserFromFirebase } from "@/lib/firebase/user.apis";
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
 import { z, ZodError } from "zod";
 
 const sheama = z.object({
@@ -8,6 +10,9 @@ const sheama = z.object({
 
 export const GET = async (req: NextRequest) => {
     try{
+        const sess1 = await getServerSession()
+        const sess2 = await getSession()
+        console.log({sess1, sess2})
         const data = {
             uid: req.nextUrl.searchParams.get('uid')
         }
