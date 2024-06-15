@@ -12,17 +12,32 @@ export const getStatisticsFromFirebase = async (uid : string,) => {
     }))
 }
 
+export const getArraysOfSpentedTime = async (uid: string, days: {day: string}[]) => {
+    return await Promise.all(
+        days.map(async ({day}) => {
+            const colRef = collection(db, `users/${uid}/statistics/${day}/routineIds`);
+            const { docs } = await getDocs(colRef);
+            return docs.map(doc => ({
+                ...doc.data(),
+                routineId: doc.id,
+                spentedTime: TimestampToDayjs(doc.data()?.spentedTime)
+            }))
+        })
+    )
+}
+
 export const addTimeToSpentedTime = async (uid : string, routineId: string, spentedTime : string) => {
     const newSpentedTime = dayjs(spentedTime)
     
     const today = dayjs().format().split("T")[0]
-    const docRef = doc(db, `users/${uid}/routines/${routineId}/spentedTime`, today)
+    
+    const docRef = doc(db, `users/${uid}/statistics/${today}/routineIds`, routineId)
     const docSnap = await getDoc(docRef)
 
 
     if (!docSnap.exists()){
         await setDoc(docRef, {
-            created: dayjsToTimestamp(dayjs(dayjs().format())), // don't know why do that rather than simple dayjs()
+            // created: dayjsToTimestamp(dayjs(dayjs().format())), // don't know why do that rather than simple dayjs()
             spentedTime: dayjsToTimestamp(newSpentedTime)
         });
     }else{

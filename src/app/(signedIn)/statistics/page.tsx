@@ -1,3 +1,4 @@
+import PieStatistic from '@/components/pie-statistic/pie-statistic-component'
 import StatisticLineWProg from '@/components/statistic-line-wprog.component'
 import { Row, Col } from 'antd'
 import React from 'react'
@@ -7,6 +8,9 @@ const Statistics = () => {
     <Row gutter={[16, 16]}>
       <Col xs={24} sm={12}>
         <StatisticLineWProg/>
+      </Col>
+      <Col>
+        <PieStatistic/>
       </Col>
       {/* <Col xs={24} sm={12}>
         <StatisticLineWProg/>
