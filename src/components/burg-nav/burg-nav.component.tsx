@@ -1,18 +1,14 @@
 'use client'
-
 import React, {useState} from 'react'
-import { MenuItemType } from '../nav-bar/nav-bar.component'
 import { useRouter } from 'next/navigation';
 import './burg-nav.styles.scss';
+import { getMenu } from '../nav-bar/utils';
 
-interface PropsType {
-    menuNotSignedIn: MenuItemType[];
-    menuSignedIn: MenuItemType[];
-}
-
-const BurgNav : React.FC<PropsType> = ({menuNotSignedIn, menuSignedIn}) => {
+const BurgNav = ({session}: {session: any}) => {
     const [isNavOn, setIsNavOn] = useState<boolean>(false);
     const router = useRouter()
+
+    const {menuSignedIn, menuNotSignedIn} = getMenu(router)
 
     const handleNavigation = (item : any) => {
         router.push(item.url)
@@ -32,19 +28,12 @@ const BurgNav : React.FC<PropsType> = ({menuNotSignedIn, menuSignedIn}) => {
 
                 <nav className="navigation-burger-menu__nav">
                     <ul className="navigation-burger-menu__list">
-
                         {
-                            // user ? menuSignedIn.map((item, key) => (
-
-                            //     <li className="navigation-burger-menu__item" key={key + '_in'}><div className="navigation-burger-menu__link" onClick={() => { history.push(item.url); setIsNavOn(false); item.action(); }} >{item.label}</div></li>
-                            // ))
-                            //     :
-                                menuNotSignedIn.map((item, key) => (
+                                (session ? menuSignedIn : menuNotSignedIn).map((item, key) => (
 
                                     <li className="navigation-burger-menu__item" key={key}>
-                                        <div className="navigation-burger-menu__link text-gray-200" onClick={() => handleNavigation(item)} >{item.label}</div>
+                                        <a  className="navigation-burger-menu__link text-gray-200 hover:cursor-pointer" onClick={() => handleNavigation(item)} >{item.label}</a>
                                     </li>
-
                                 ))
                         }
 

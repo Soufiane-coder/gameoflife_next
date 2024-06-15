@@ -25,6 +25,7 @@ const GameField = () => {
     if (user && !routines) { 
       // the !routines is in the case that routines array is already loaded to no re-fetch
       dispatch(fetchRoutines({ uid: user.uid, lastVisit: user.lastVisit }))
+      console.log(loading, routines)
     }
   }, [dispatch])
 
@@ -39,8 +40,8 @@ const GameField = () => {
         </div>
       </>)
   }
+  console.log("hell yeah...")
 
-  
 
   return (
     <div>
@@ -77,10 +78,10 @@ const GameField = () => {
       </div>
       <div className='grid justify-center justify-items-center gap-5 grid-cols-grid-routine-card-cols'>
         {
-          routines.length === 0 ?
+          routines?.length === 0 ?
             <h5>There is no routines add Routine</h5>
             :
-            routines.map((routine, key) => (
+            routines?.map((routine, key) => (
               <React.Fragment key={key}>
                 <RoutineCard routine={routine} />
               </React.Fragment>))

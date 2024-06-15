@@ -9,13 +9,15 @@ import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { fetchUser } from '@/redux/features/userSlice';
 import UserLoader from '@/components/user-loader/user-loader.layout';
-import { getServerSession } from 'next-auth';
-import authOptions from '../api/auth/[...nextauth]/authOptions';
+// import { getServerSession } from 'next-auth';
+import authOptions from '@/app/api/auth/[...nextauth]/authOptions';
+import StyledComponentsRegistry from '../styled-components-registry';
 
 const SignedInLayout = async ({ children }: Readonly<{
     children: React.ReactNode;
 }>) => {
-    const session = await getServerSession(authOptions)
+    // const session = await getServerSession(authOptions)
+
     // console.log({session: session.toJSON()})
     // const {data: session, status} = useSession()
     // const dispatch = useAppDispatch()
@@ -41,11 +43,15 @@ const SignedInLayout = async ({ children }: Readonly<{
     // if (status === 'loading' || loading || !user){
     //     return (<UserLoader/>)
     // }
+
+    // console.log({session})
     return (
-        <main className='p-2 md:pr-20 min-h-full'>
-            <UserBar user={session?.user as UserType}/>
-            {/* {children} */}
-        </main>
+        <StyledComponentsRegistry>
+            <main className='p-2 md:pr-20 min-h-full'>
+                {/* <UserBar user={JSON.parse(JSON.stringify(session?.user)) as UserType}/> */}
+                {/* {children} */}
+            </main>
+        </StyledComponentsRegistry>
     )
 }
 

@@ -2,6 +2,7 @@
 import { db } from "./firebaseConfig";
 import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { UserType } from "@/types/user.type";
+import { TimestampToDayjs } from "./utils";
 
 
 export const addNewUser = async (userLite: any) => {
@@ -10,7 +11,7 @@ export const addNewUser = async (userLite: any) => {
     let docSnap = await getDoc(userDoc)
     if (!docSnap.exists()) {
         // User default values with init values
-        const user : UserType = { 
+        const user = { 
             uid,
             email,
             displayName,
@@ -20,7 +21,7 @@ export const addNewUser = async (userLite: any) => {
             coins: 0,
             rate: 1,
             xp: 0,
-            lastVisit: new Timestamp(0, 0),
+            lastVisit: new Timestamp(0, 0), // not dayjs to I can delivered to the firebase
         }
         await setDoc(userDoc, user);
     }
@@ -33,5 +34,9 @@ export const getUserFromFirebase = async (uid: string) : Promise<UserType> => {
     if (!docSnap.exists()) {
         throw new Error('This user does not exist')
     }
-    return docSnap.data() as UserType;
+    const data = docSnap.data();
+
+    data.lastVisit = TimestampToDayjs(data.lastVisit as Timestamp)
+
+    return Promise.resolve(data as UserType)
 }

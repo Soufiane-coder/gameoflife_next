@@ -1,4 +1,4 @@
-import { Timestamp } from "firebase/firestore";
+import { Dayjs } from "dayjs";
 
 export interface UserType {
     uid : string,
@@ -10,5 +10,5 @@ export interface UserType {
     coins: number,
     rate: 1 | 2 | 3 | 4 | 5,
     xp: number,
-    lastVisit: Timestamp
+    lastVisit: Dayjs,
 }

@@ -7,6 +7,7 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
 import Providers from "./providers";
 import Script from "next/script";
+import StyledComponentsRegistry from "./styled-components-registry";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -15,12 +16,12 @@ export const metadata: Metadata = {
   description,
 };
 
-export default function RootLayout({
+const RootLayout =({
   children,
   }: Readonly<{
     children: React.ReactNode;
     pageProps: any
-  }>) {
+  }>) => {
 
   const theme : ThemeConfig = {
     // components: {
@@ -43,17 +44,21 @@ export default function RootLayout({
         }
         
       </head>
-      <AntdRegistry >
+      
       <body id="body" className={`${quicksand.className} bg-gray-50 `}>
         {/* Providers contains some client side componenet providers (session,)  */}
-        <Providers>
-          <NavigationBar/>
-          <ConfigProvider theme={theme}>
+        <ConfigProvider theme={theme}>
+          <Providers>
+            <NavigationBar/>
+            <AntdRegistry >
               {children}
-          </ConfigProvider>
-        </Providers>
+            </AntdRegistry>
+          </Providers>
+        </ConfigProvider>
       </body>
-      </AntdRegistry>
+      
     </html>
   );
 }
+
+export default RootLayout

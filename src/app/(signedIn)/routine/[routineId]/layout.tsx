@@ -27,7 +27,9 @@ const RoutineLayout = ({ children, params }: Readonly<{
     if(loading || !routines){
       return <h1>loading...</h1>
     }
-    const selectedRoutine = routines?.find(routine => routine.routineId === params.routineId)
+
+    const selectedRoutine = routines?.find(routine => routine.routineId === params.routineId);
+    
     if(!selectedRoutine) {
       return <h1>There is no such routine!</h1>
     }

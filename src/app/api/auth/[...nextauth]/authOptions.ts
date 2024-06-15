@@ -1,7 +1,8 @@
 import GoogleProvider  from "next-auth/providers/google"
 import type { NextAuthOptions, Session } from "next-auth"
 import { addNewUser, getUserFromFirebase } from "@/lib/firebase/user.apis"
-
+import { signOut } from "next-auth/react"
+import { UserType } from "@/types/user.type"
 
 const authOptions : NextAuthOptions = {
   // Configure one or more authentication providers
@@ -30,9 +31,15 @@ const authOptions : NextAuthOptions = {
     },
     session: async ({session, token ,}) => {
       // adding user id to session to get when we need it for identifying the user
-      const user = await getUserFromFirebase(token.sub as string)
-      session.user = user
-      return session
+      let user;
+      try{
+        user = await getUserFromFirebase(token.sub as string)
+      }catch(err){
+        signOut({ callbackUrl: '/signin' })
+      }
+      // JSON.parse and JSON.stringify to not pass complex object from server compo to client compo
+      session.user = JSON.parse(JSON.stringify(user)); 
+      return session;
     }
   }
 }
