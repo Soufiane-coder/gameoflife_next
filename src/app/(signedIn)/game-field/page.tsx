@@ -15,19 +15,23 @@ import RoutineLoading from '@/components/routine-loading.component'
 import { selectFilterOptions } from './utils'
 
 const GameField = () => {
+
   const { user } = useAppSelector((state) => state.userReducer)
   const dispatch = useAppDispatch()
   const { routines, loading, error } = useAppSelector((state) => state.routinesReducer)
   const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
   const [openAddCategory, setOpenAddCategory] = useState<boolean>(false)
 
+  if(error != ''){
+    throw new Error(error)
+  }
+
   useEffect(() => {
     if (user && !routines) { 
       // the !routines is in the case that routines array is already loaded to no re-fetch
       dispatch(fetchRoutines({ uid: user.uid, lastVisit: user.lastVisit }))
-      console.log(loading, routines)
     }
-  }, [dispatch])
+  }, [user, dispatch])
 
   if (loading || !routines) {
     return (
@@ -40,7 +44,6 @@ const GameField = () => {
         </div>
       </>)
   }
-  console.log("hell yeah...")
 
 
   return (

@@ -3,21 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import { z, ZodError } from "zod";
-
-const sheama = z.object({
-    uid: z.string().max(50).min(1)
-})
+import authOptions from "../[...nextauth]/authOptions";
 
 export const GET = async (req: NextRequest) => {
     try{
-        const sess1 = await getServerSession()
-        const sess2 = await getSession()
-        console.log({sess1, sess2})
-        const data = {
-            uid: req.nextUrl.searchParams.get('uid')
+        const session = await getServerSession(authOptions)
+        if(!session || !session.user){
+            throw new Error('There is no current user')
         }
-        sheama.parse(data)
-        const user = await getUserFromFirebase(data.uid as string)
+        const user = await getUserFromFirebase((session.user as any).uid)
         return NextResponse.json(user, {status : 200})
     }catch(error){
         if(error instanceof ZodError){

@@ -1,5 +1,6 @@
 import RoutineType from "@/types/routine.type";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Dayjs } from "dayjs";
 import { Timestamp } from "firebase/firestore";
 
 type RoutineInitType = {
@@ -14,7 +15,7 @@ const routineInitialState : RoutineInitType = {
     error: '', 
 }
 
-export const fetchRoutines = createAsyncThunk('routine/fetchRoutines', async ({uid, lastVisit}: {uid: string, lastVisit: Timestamp}) => {
+export const fetchRoutines = createAsyncThunk('routine/fetchRoutines', async ({uid, lastVisit}: {uid: string, lastVisit: Dayjs}) => {
     const res = await fetch(`/api/firebase/routines`, {
         method: 'PATCH',
         headers: {
@@ -25,7 +26,7 @@ export const fetchRoutines = createAsyncThunk('routine/fetchRoutines', async ({u
             lastVisit,
         }),
     })
-    return await res.json()
+    return await res.json() as RoutineType[]
 })
 
 

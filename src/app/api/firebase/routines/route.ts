@@ -6,20 +6,17 @@ import { UserType } from "@/types/user.type"
 import { RoutineDeliverableType } from "@/types/routine.type"
 import { Timestamp } from "firebase/firestore"
 import { initialProtocol } from "./utils"
+import dayjsToTimestamp from "@/lib/firebase/utils"
+import dayjs from "dayjs"
 
 const schema = z.object({
     uid: z.string().max(50).min(1),
-    lastVisit: z.custom((val : any) => {
-        if(val?.seconds instanceof Number && val?.nanoseconds instanceof Number && Object.keys(val).length === 2){
-            return val
-        }
-        return val
-    })
+    lastVisit: z.string(),
 })
 
 interface RequestBody {
     uid: string
-    lastVisit: Timestamp;
+    lastVisit: string;
 }
 
 export const PATCH = async (req: NextRequest) => {
@@ -29,7 +26,7 @@ export const PATCH = async (req: NextRequest) => {
         const {uid, lastVisit} = data
         let routines = await getRoutinesFromFirebase(data.uid as string)
         // lastVisit not getting the Timestamp object with their functions so we convert it to timesamp
-        routines = await initialProtocol(uid, new Timestamp(lastVisit.seconds, lastVisit.nanoseconds), routines) as any
+        routines = await initialProtocol(uid, dayjsToTimestamp(dayjs(lastVisit)), routines) as any
         return NextResponse.json(routines, {status : 200})
     }catch(error : any){
         if(error instanceof ZodError){

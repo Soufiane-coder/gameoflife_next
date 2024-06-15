@@ -7,7 +7,6 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
 import Providers from "./providers";
 import Script from "next/script";
-import StyledComponentsRegistry from "./styled-components-registry";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -16,7 +15,7 @@ export const metadata: Metadata = {
   description,
 };
 
-const RootLayout =({
+const RootLayout = ({
   children,
   }: Readonly<{
     children: React.ReactNode;
