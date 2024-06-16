@@ -5,17 +5,19 @@ import React from 'react'
 
 const Statistics = () => {
   return (
-    <Row gutter={[16, 16]}>
-      <Col xs={24} sm={12}>
-        <StatisticLineWProg/>
-      </Col>
-      <Col>
-        <PieStatistic/>
-      </Col>
-      {/* <Col xs={24} sm={12}>
-        <StatisticLineWProg/>
-      </Col> */}
-    </Row>
+    <div className='mt-20 md:mt-0'>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12}>
+          <StatisticLineWProg/>
+        </Col>
+        <Col xs={24} sm={12}>
+          <PieStatistic/>
+        </Col>
+        {/* <Col xs={24} sm={12}>
+          <StatisticLineWProg/>
+        </Col> */}
+      </Row>
+    </div>
   )
 }
 

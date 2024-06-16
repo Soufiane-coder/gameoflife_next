@@ -8,26 +8,27 @@ import dayjs from "dayjs";
 
 const sumSpentedTime = (
 	arr: { routineId: string; spentedTime: dayjs.Dayjs }[][],) => {
-	const result: Record<string, dayjs.Dayjs> = {};
+	const result: Record<string, number> = {};
 
 	arr.forEach((subArray) => {
 		subArray.forEach((item) => {
 			const { routineId, spentedTime } = item;
 			if (result[routineId]) {
-				result[routineId] = result[routineId].add(
-					spentedTime.valueOf(),
-				);
+				// result[routineId] = result[routineId].add(
+				// 	spentedTime.valueOf(),
+				// );
+                result[routineId] += dayjs(spentedTime).unix()
 			} else {
-				result[routineId] = spentedTime;
+				result[routineId] = dayjs(spentedTime).unix();
 			}
 		});
 	});
 
-	// return result;
+	return result;
 
     return Object.keys(result).map(routineId => ({
-        type: routineId,
-        value: dayjs(result[routineId]).unix(),
+        routineId,
+        spentedTime: dayjs(result[routineId]).unix(),
       }));
 };
 
@@ -37,14 +38,9 @@ export const GET = async (req: NextRequest) => {
         if(!(session?.user as any)?.uid){
             throw new Error('There is no user')
         }
-        console.log((session?.user as any)?.uid)
         const statistics = await getStatisticsFromFirebase((session?.user as any)?.uid)
-
+        // console.log({statistics})
         const data = await getArraysOfSpentedTime((session?.user as any)?.uid, statistics as any)
-        console.log(data)
-
-        
-
         return NextResponse.json(sumSpentedTime(data) , {status: 200})
     }catch(error){
         if(error instanceof ZodError){

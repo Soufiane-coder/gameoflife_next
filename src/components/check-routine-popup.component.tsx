@@ -63,11 +63,11 @@ const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
                         message,
                     }),
                 })
-                console.log((await res.json()).message)
+                // console.log((await res.json()).message)
                 dispatch(checkRoutine(routineId as string))
                 dispatch(addCoin())
             } catch (error: any) {
-                console.log(error, 'Try again later')
+                console.error(error, 'Try again later')
             } finally {
                 setLoading(false)
                 setMessage('')

@@ -26,12 +26,6 @@ const GameField = () => {
     throw new Error(error)
   }
 
-  useEffect(() => {
-    if (user && !routines) { 
-      // the !routines is in the case that routines array is already loaded to no re-fetch
-      dispatch(fetchRoutines({ uid: user.uid, lastVisit: user.lastVisit }))
-    }
-  }, [user, dispatch])
 
   if (loading || !routines) {
     return (

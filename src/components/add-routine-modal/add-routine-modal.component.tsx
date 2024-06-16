@@ -25,7 +25,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 	const [form] = Form.useForm()
 	const [showEmojis, setShowEmojis] = useState<boolean>(false)
 	const [emoji, setEmoji] = useState<string>(routineToEdit?.emoji || '')
-	const [bgEmojiColor, setBgEmojiColor] = useState<string>(routineToEdit?.bgEmojiColor || '#fff')
+	const [bgEmojiColor, setBgEmojiColor] = useState<string>(routineToEdit?.bgEmojiColor || randomColor())
 	const [loading, setLoading] = useState<boolean>(false)
 	const dispatch = useAppDispatch();
 
@@ -47,7 +47,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 		isSubmitted: false,
 		categoryId: '',
 		lastSubmit: dayjs(0),
-		bgEmojiColor: '#fff',
+		bgEmojiColor: '#ffffff',
 		character: '',
 		spentedTime: dayjs(0),
 	}
