@@ -4,6 +4,8 @@ import authOptions from "../../auth/[...nextauth]/authOptions";
 import { getArraysOfSpentedTime, getStatisticsFromFirebase } from "@/lib/firebase/statistic.apis";
 import dayjs from "dayjs";
 
+export const dynamic = 'force-dynamic'
+
 const sumSpentedTime = (
 	arr: { routineId: string; spentedTime: dayjs.Dayjs }[][],) => {
 	const result: Record<string, number> = {};
