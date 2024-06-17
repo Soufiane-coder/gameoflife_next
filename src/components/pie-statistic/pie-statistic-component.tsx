@@ -25,6 +25,10 @@ const PieStatistic = () => {
 
     }, [routines])
 
+    useEffect(() => {
+      console.log({spentedTime})
+    }, [spentedTime])
+
     const data = {
       labels: routines?.map((routine) => `${routine.emoji} ${routine.title}`),
       datasets: [

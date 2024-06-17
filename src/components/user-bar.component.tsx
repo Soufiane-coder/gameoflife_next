@@ -12,7 +12,7 @@ const UserBar = async ({user} : {user: UserType}) => {
         <header className='h-10 max-h-10 flex items-center justify-between relative border-b-2'>
             <div className='flex items-center'>
                 {/* <h2 className='h2'>Game Of Life</h2> */}
-                <Link href='/'  >
+                <Link href='/' >
                     <Image src={golIcon} alt='image' height={30} />
                 </Link>
             </div>
