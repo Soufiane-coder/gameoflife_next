@@ -6,7 +6,7 @@ export enum PriorityType {
     IMPORTANT = 'important',
 }
 
-export enum FilterLabelsType{
+export enum FilterValuesType{
     ALL = 'all',
     IMPORTANT = 'important',
     COMPLETED = 'completed',

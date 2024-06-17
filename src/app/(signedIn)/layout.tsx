@@ -12,7 +12,7 @@ const SignedInLayout = async ({ children }: Readonly<{
     const session = await getServerSession(authOptions)
     return (
         <StyledComponentsRegistry>
-            <main className='p-2 md:pr-20 min-h-full'>
+            <main className='p-2 pt-0 md:pr-20 min-h-full'>
                 <UserBar user={session?.user as UserType}/>
                 {children}
             </main>

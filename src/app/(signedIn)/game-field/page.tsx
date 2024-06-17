@@ -12,7 +12,8 @@ import RoutineCard from '@/components/routine-card.component'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import AddCategoryModal from '@/components/add-category-modal.component'
 import RoutineLoading from '@/components/routine-loading.component'
-import { selectFilterOptions } from './utils'
+import { filterRoutines, selectFilterOptions } from './utils'
+import { FilterValuesType } from '@/types/general.type'
 
 const GameField = () => {
 
@@ -22,15 +23,42 @@ const GameField = () => {
   const [openAddRoutine, setOpenAddRoutine] = useState<boolean>(false)
   const [openAddCategory, setOpenAddCategory] = useState<boolean>(false)
 
+  const [selectedFilterValue, setSelectedFilterValue] = useState<FilterValuesType>(FilterValuesType.UNARCHIVED);
+  const [selectedRoutines, setSelectedRoutines] = useState<RoutineType[] | null>(null)
+
   if(error != ''){
     throw new Error(error)
   }
 
+  useEffect(() => {
+    if(routines){
+      setSelectedRoutines(filterRoutines(routines, selectedFilterValue, ['monday']))
+    }
+  }, [selectedFilterValue, routines])
 
-  if (loading || !routines) {
+  if (loading || !routines || !selectedRoutines) {
     return (
       <>
-        <div className='min-h-20'></div>
+      <div className='min-h-14 my-2 flex items-center flex-wrap gap-x-5 gap-y-2'>
+        <Select
+					defaultValue={FilterValuesType.UNARCHIVED}
+					placeholder="select attribute..."
+					style={{minWidth: '15rem'}}
+				/>
+      </div>
+      <div className='flex gap-3'>
+        <Button
+          className='mt-auto'
+          color='cyan'
+          type='primary'>
+          Add Category
+        </Button>
+        <Button
+          className='mt-auto'
+          type='primary'>
+          Add routine
+        </Button>
+      </div>
         <div className='grid justify-center justify-items-center grid-cols-grid-routine-card-cols'>
           {
             [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((_, key) => (<React.Fragment key={key}><RoutineLoading /></React.Fragment>))
@@ -39,26 +67,27 @@ const GameField = () => {
       </>)
   }
 
-
   return (
     <div>
-      <div>
+      <div className='min-h-14 my-2 flex items-center flex-wrap gap-x-5 gap-y-2'>
         <Select
 					options={selectFilterOptions}
-					defaultValue={selectFilterOptions[selectFilterOptions.length - 1]}
+					defaultValue={FilterValuesType.UNARCHIVED}
 					placeholder="select attribute..."
 					style={{minWidth: '15rem'}}
-					// onChange={setSelectedFilterOption}
+					onChange={setSelectedFilterValue}
 				/>
       </div>
-      <div className='min-h-20'>
+      <div className='flex gap-3'>
         <Button
+          className='mt-auto'
           color='cyan'
           type='primary'
           onClick={() => setOpenAddCategory(true)}>
           Add Category
         </Button>
         <Button
+          className='mt-auto'
           type='primary'
           onClick={() => setOpenAddRoutine(true)}>
           Add routine
@@ -75,13 +104,12 @@ const GameField = () => {
       </div>
       <div className='grid justify-center justify-items-center gap-5 grid-cols-grid-routine-card-cols'>
         {
-          routines?.length === 0 ?
-            <h5>There is no routines add Routine</h5>
-            :
-            routines?.map((routine, key) => (
+          routines?.length === 0 ? <h5>There is no routines add routine</h5> : // to indicate that there is no routine at all
+           ( selectedRoutines?.length === 0 ? (<h5>There is no {selectedFilterValue} routines</h5>) : // to indicate that there is no routine with that crieteria
+            selectedRoutines?.map((routine, key) => (
               <React.Fragment key={key}>
                 <RoutineCard routine={routine} />
-              </React.Fragment>))
+              </React.Fragment>)))
         }
       </div>
     </div>

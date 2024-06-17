@@ -40,7 +40,7 @@ const PieStatistic = () => {
 
     return (
         <Card loading={!spentedTime} className='p-12'>
-            {Object.keys(spentedTime || []).length !== 0 ? <Pie data={data} /> : null}
+            {Object.keys(spentedTime || []).length !== 0 ? <Pie data={data} /> : <h5>There is no statistics yet start checking routines</h5> }
         </Card>
     )
 }

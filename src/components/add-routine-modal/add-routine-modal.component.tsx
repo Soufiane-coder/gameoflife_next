@@ -47,7 +47,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 		isSubmitted: false,
 		categoryId: '',
 		lastSubmit: dayjs(0),
-		bgEmojiColor: '#ffffff',
+		bgEmojiColor:  randomColor(),
 		character: '',
 		spentedTime: dayjs(0),
 	}
@@ -76,7 +76,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 			setLoading(false)
 			form.resetFields();
 			setEmoji(routineToEdit?.emoji || '')
-			setBgEmojiColor(routineToEdit?.bgEmojiColor || '#fff')
+			setBgEmojiColor(routineToEdit?.bgEmojiColor || randomColor())
 			setOpen(false)
 		}
 	}
@@ -102,7 +102,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 			setLoading(false)
 			form.resetFields();
 			setEmoji(routineToEdit?.emoji || '')
-			setBgEmojiColor(routineToEdit?.bgEmojiColor || '#fff')
+			setBgEmojiColor(routineToEdit?.bgEmojiColor || randomColor())
 			setOpen(false)
 		}
 	}
@@ -143,7 +143,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 			onCancel={() => {
 				setOpen(false);
 				setEmoji(routineToEdit?.emoji || '')
-				setBgEmojiColor(routineToEdit?.bgEmojiColor || '#fff')}}
+				setBgEmojiColor(routineToEdit?.bgEmojiColor || randomColor())}}
 		>
 			{/* <HexColorPicker color={bgEmojiColor} onChange={setBgEmojiColor} /> */}
 			<Button
