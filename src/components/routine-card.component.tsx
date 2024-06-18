@@ -9,7 +9,7 @@ import { GoGoal } from "react-icons/go";
 import Link from 'next/link';
 import CheckRoutinePopup from './check-routine-popup.component';
 import { ContextHolderMessage, ContextHolderNotification } from '@/app/providers';
-import { checkRoutine, removeRoutine } from '@/redux/features/routinesSlice';
+import { checkRoutine, removeRoutine, setArchive } from '@/redux/features/routinesSlice';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import AddRoutineModal from './add-routine-modal/add-routine-modal.component';
 import { buySkip } from '@/redux/features/routinesSlice';
@@ -65,6 +65,28 @@ const RoutineCard = ({routine} : {routine : RoutineType}) => {
 		}
   }
 
+  const handleArchiveRoutine = async() => {
+    try{
+      const res = await fetch('/api/firebase/archive-routine', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ 
+          uid: user?.uid,
+          routineId: routine.routineId,
+          archived: !routine.isArchived,
+				})
+			})
+      dispatch(setArchive(routine.routineId as string))
+      const {message} = await res.json()
+      console.log(message)
+    }
+    catch(error){
+      console.error(error)
+    }
+  }
+
   const handleEditRoutine = async () => {
     setPopups(old => ({...old, editPopup: true}))
   }
@@ -102,8 +124,7 @@ const RoutineCard = ({routine} : {routine : RoutineType}) => {
 			label: (
 			<a onClick={async (event) => {
 				event.preventDefault();
-				// await setArchivedOptionInFirebase(?uid, routine.routineId, !routine.isArchived)
-				// setArchivedOption(routine.routineId, !routine.isArchived)
+				handleArchiveRoutine()
 			}}>
 				{routine.isArchived ? "Desarchive" : "Archive"}
 			</a>

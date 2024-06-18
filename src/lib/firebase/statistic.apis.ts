@@ -30,10 +30,17 @@ export const addTimeToSpentedTime = async (uid : string, routineId: string, spen
     const newSpentedTime = dayjs(spentedTime)
     
     const today = dayjs().format().split("T")[0]
+
+    const dayRef = doc(db, `users/${uid}/statistics`, today) // I aded this so i can retrave date to passit to get routine spendted time
+    const daySnap = await getDoc(dayRef)
+    if (!daySnap.exists()){
+        await setDoc(dayRef, {
+            day: today
+        });
+    }
     
     const docRef = doc(db, `users/${uid}/statistics/${today}/routineIds`, routineId)
     const docSnap = await getDoc(docRef)
-
 
     if (!docSnap.exists()){
         await setDoc(docRef, {

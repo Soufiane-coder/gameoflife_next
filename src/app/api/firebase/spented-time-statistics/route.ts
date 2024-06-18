@@ -4,7 +4,7 @@ import authOptions from "../../auth/[...nextauth]/authOptions";
 import { getArraysOfSpentedTime, getStatisticsFromFirebase } from "@/lib/firebase/statistic.apis";
 import dayjs from "dayjs";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic' // because we don't take anything from client so server thinks that this is a static api but there is session part that is dynamic
 
 const sumSpentedTime = (
 	arr: { routineId: string; spentedTime: dayjs.Dayjs }[][],) => {
@@ -23,6 +23,8 @@ const sumSpentedTime = (
 			}
 		});
 	});
+
+    
 
 	return result;
 

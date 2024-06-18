@@ -11,7 +11,7 @@ const FocusMode = ({params}: {params: {routineId: string}}) => {
   const selectedRoutine = routines?.find(routine => routine.routineId === params.routineId) as RoutineType
 
   return (
-    <div className='h-[90lvh] max-h-lvh flex justify-center items-start gap-7'>
+    <div className='h-[90lvh] max-h-lvh flex justify-center items-center gap-7 flex-wrap'>
         <RoutineCard routine={selectedRoutine}/>
         <TimeRecorderPage routineId={params.routineId}/>
     </div>

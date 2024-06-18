@@ -1,10 +1,12 @@
 'use client'
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import dayjs, { Dayjs } from 'dayjs';
-import PieSlice from './pie.slice.component';
 import { Button, Flex, TimePicker, Space, Radio, Card} from 'antd';
-import { UserType } from '@/types/user.type';
 import { useAppSelector } from '@/redux/hooks';
+
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 function timeStringToSeconds(dayjs: Dayjs) {
     const currentTime = dayjs.format('HH:mm')
@@ -16,13 +18,7 @@ function timeStringToSeconds(dayjs: Dayjs) {
     return totalSeconds;
 }
 
-function getAngleFromSeconds(totalSeconds : number, currentSecond: number) : number {
-    const totalDegrees = totalSeconds * 360; // Total degrees based on total seconds
-    const elapsedDegrees = (currentSecond * 360) / totalSeconds; // Degrees elapsed from the current second
-    const angle = totalDegrees - elapsedDegrees; // Calculate the angle in degrees
   
-    return angle % 360;
-}
 
 const TimeRecorderPage : React.FC<{routineId: string}> = ({routineId}) => {
     const [ totalTimeSpented, setTotalTimeSpented ] = useState<Dayjs>(dayjs(0))
@@ -86,16 +82,68 @@ const TimeRecorderPage : React.FC<{routineId: string}> = ({routineId}) => {
         setSeconds(timeStringToSeconds(time));
     }
 
+    // useEffect(() => {
+    //     console.log((seconds/totalSeconds) * 100); // time left
+    //     console.log(((totalSeconds-seconds) * 100)/totalSeconds) // time passes
+    // },[seconds])
+
+    // const data = {
+    //     labels: ['Time spented', 'Time left'],
+    //     datasets: [
+    //       {
+    //         label: '# of Votes',
+    //         data: [5, 10],
+    //         backgroundColor: [
+    //           'rgba(255, 99, 132, 0.2)',
+    //           'rgba(54, 162, 235, 0.2)',
+    //         ],
+    //         borderColor: [
+    //           'rgba(255, 99, 132, 1)',
+    //           'rgba(54, 162, 235, 1)',
+    //         ],
+    //         borderWidth: 1,
+    //         cutout: '90%',
+    //       },
+    //     ],
+    //   };
+
+      const data = useMemo(() => {
+        return  {
+            labels: ['Time spented', 'Time left'],
+            datasets: [
+              {
+                label: 'Percentage',
+                data: [((totalSeconds-seconds) * 100)/totalSeconds, (seconds/totalSeconds) * 100],
+                backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(200, 200, 200, 0.2)',
+                ],
+                borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(200, 200, 200, 1)',
+                ],
+                borderWidth: 1,
+                cutout: '90%',
+              },
+            ],
+          };
+      }, [seconds])
+    
+      const options = {
+        animation:{
+            duration: 1000,
+        },
+        plugins: {
+            legend: {
+                display: false,
+            },
+        },
+      }
 
     return (
         <Card>
             <Flex className='time-recorder' vertical={true} align='stretch' gap='small'>
-                <PieSlice 
-                    radius={80}
-                    startAngle={getAngleFromSeconds(totalSeconds, seconds) - 89.9}
-                    endAngle={360 - 90}
-                    fill="#1677ff" />
-                {/* <Radio.Group options={options} onChange={onChange3} value={value3} optionType="button" /> */}
+                <Doughnut data={data} options={options}/>;
 
                 {
                     !isActive ?
@@ -106,11 +154,7 @@ const TimeRecorderPage : React.FC<{routineId: string}> = ({routineId}) => {
                     {/* <Button onClick={handleStartStop}>{isActive ? 'Pause' : 'Start'}</Button> */}
                     <Button onClick={handleReset}>{isActive ? 'Reset' : 'Start'}</Button>
                 </Space>
-                {/* <Radio.Group 
-                    options={options}
-                    // onChange={onChange3}
-                    value={options[0].value}
-                    optionType="button" /> */}
+                
                 <Space><p>Total time: </p><span>{totalTimeSpented.toISOString().split('T')[1].split('.')[0]}</span></Space>
             </Flex>
         </Card>

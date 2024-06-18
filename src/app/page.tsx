@@ -11,6 +11,7 @@ const ImprimaFont = Imprima({
   weight: "400"
 })
 
+export const dynamic = 'force-static'
 export default function Home() {
   return (
     <>

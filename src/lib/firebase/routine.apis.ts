@@ -89,6 +89,12 @@ export const editRoutineInFirebase = async (uid: string , routine : RoutineType)
     })
 }
 
+export const setArchivedOptionInFirebase = async (uid: string, routineId: string, archivedOption: boolean) => {
+    await updateDoc(doc(db, `/users/${uid}/routines`, routineId), {
+        isArchived: archivedOption,
+    })
+}
+
 // todo to delete
 // export const addTimeToSpentedTime = async (uid : string, routineId: string, spentedTime : Dayjs) => {
  
