@@ -1,5 +1,4 @@
 "use client"
-
 import StatisticsType from '@/types/statistics.type'
 import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
@@ -15,7 +14,6 @@ import {
   } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Card } from 'antd'
-import { useAppSelector } from '@/redux/hooks'
 
 ChartJS.register(
     CategoryScale,
@@ -50,7 +48,7 @@ const isToday = (dateString : string) => {
 }
 
 const StatisticLineWProg = () => {
-    const [lineStatistics, setLineStatistics] = useState<{day: string, checkedRoutines: number}[] | null>(null)
+    const [lineStatistics, setLineStatistics] = useState<{day: string, checkedRoutines: number | undefined}[] | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
@@ -58,7 +56,7 @@ const StatisticLineWProg = () => {
             try{
                 const req = await fetch(`/api/firebase/days-statistics`)
                 const statistics = await req.json() as StatisticsType[]
-                setLineStatistics(statistics.map(stat => ({day: stat.day, checkedRoutines: stat.checkedRoutines.length})))
+                setLineStatistics(statistics.map(stat => ({day: stat.day, checkedRoutines: stat.checkedRoutines?.length || 0})))
                 setIsLoading(false)
                 // console.log({statistics})
                 // console.log(statistics.map(stat => ({day: stat.day, checkedRoutines: stat.checkedRoutines.length})))
@@ -96,7 +94,7 @@ const StatisticLineWProg = () => {
         datasets: [
           {
             label: 'Chart of progress',
-            data: lineStatistics?.map(({checkedRoutines}) => checkedRoutines),
+            data: lineStatistics?.map(({checkedRoutines}) => checkedRoutines), // in case there is no checkedRoutines
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
           },
