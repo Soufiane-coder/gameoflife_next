@@ -13,15 +13,15 @@ export interface MenuItemType {
     action: (url: string) => void;
 }
 
+// export const dynamic = 'force-dynamic'
 
-const NavigationBar : React.FC = async ({}) => {    
+
+const NavigationBar : React.FC = async () => {    
     const session = await getServerSession(authOptions)
     return (
         <>
             <div className="hidden bg-yellow-400 md:flex flex-col w-fit rounded-l-4xl fixed right-0 top-10 z-10">
-                {
-                    <ButtonNav session={session}/>
-                }
+                <ButtonNav session={session}/>
             </div>
             <BurgNav session={session}/>
          </>

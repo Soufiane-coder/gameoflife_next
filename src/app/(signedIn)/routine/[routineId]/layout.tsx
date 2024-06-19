@@ -1,14 +1,8 @@
 'use client'
-import React, { Suspense, useEffect , useState} from 'react'
-import UserBar from '@/components/user-bar.component';
-import { getSession, useSession } from 'next-auth/react'
-import { useGetUserQuery, useGetRoutinesQuery } from '@/redux/services/apiSlice'
-import { UserType } from '@/types/user.type';
+import React, {useEffect} from 'react'
 import { fetchRoutines, setRoutines } from '@/redux/features/routinesSlice'
-import RoutineType from '@/types/routine.type'
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { fetchUser } from '@/redux/features/userSlice';
-import UserLoader from '@/components/user-loader/user-loader.layout';
+import Link from 'next/link';
 
 const RoutineLayout = ({ children, params }: Readonly<{
     children: React.ReactNode;
@@ -31,7 +25,7 @@ const RoutineLayout = ({ children, params }: Readonly<{
     const selectedRoutine = routines?.find(routine => routine.routineId === params.routineId);
     
     if(!selectedRoutine) {
-      return <h1>There is no such routine!</h1>
+      return <h1>There is no routine with that Id, <Link href='/game-field'>Go back to game field</Link></h1>
     }
   
     return children

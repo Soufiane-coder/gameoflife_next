@@ -7,6 +7,10 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ConfigProvider, ThemeConfig } from "antd";
 import Providers from "./providers";
 import Script from "next/script";
+import { getServerSession } from "next-auth";
+import authOptions from "./api/auth/[...nextauth]/authOptions";
+import { UserType } from "@/types/user.type";
+import UserBar from "@/components/user-bar.component";
 
 const quicksand = Quicksand({ subsets: ["latin"] });
 
@@ -15,7 +19,9 @@ export const metadata: Metadata = {
   description,
 };
 
-const RootLayout = ({
+export const dynamic = 'force-dynamic'
+
+const RootLayout = async ({
   children,
   }: Readonly<{
     children: React.ReactNode;
@@ -49,8 +55,8 @@ const RootLayout = ({
         <ConfigProvider theme={theme}>
           <Providers>
             <NavigationBar/>
-            <AntdRegistry >
-              {children}
+            <AntdRegistry >              
+                {children}
             </AntdRegistry>
           </Providers>
         </ConfigProvider>
