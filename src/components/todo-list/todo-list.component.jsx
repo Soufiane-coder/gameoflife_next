@@ -45,8 +45,8 @@ const ToDoList = ({className}) => {
                 </Row>
                 <Row gutter={[0, 0]}>
                     {todoList?.map((todoItem, key) => (
-                            <ToDoItem 
-                                {...{todoItem, setTodoList, user, key}}/>
+                            <ToDoItem key={key}
+                                {...{todoItem, setTodoList, user}}/>
                     ))}
                 </Row>
             </Card>
