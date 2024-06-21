@@ -26,7 +26,7 @@ interface PopupsType {
 
 const { Text } = Typography
 
-const RoutineCard = ({routine} : {routine : RoutineType}) => {
+const RoutineCard = ({routine, className = ''} : {routine : RoutineType, className ?: string}) => {
   const init : PopupsType = {
     checkPopup: false,
     editPopup: false,
@@ -189,7 +189,7 @@ const RoutineCard = ({routine} : {routine : RoutineType}) => {
   }
 
   return (
-    <div className='w-[22rem] h-52 mt-16'>
+    <div className={`w-[22rem] h-52 mt-16 ${className}`}>
       <Badge.Ribbon
         text={routine.priority.charAt(0).toUpperCase() + routine.priority.slice(1)}
         color={colorMap[routine.priority]}
