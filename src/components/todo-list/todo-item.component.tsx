@@ -1,10 +1,19 @@
 
-import { Fragment, useState } from "react";
+import { Dispatch, Fragment, SetStateAction, useState } from "react";
 import {Col, Checkbox, Button} from 'antd';
 import {EditOutlined,LoadingOutlined, DeleteOutlined} from '@ant-design/icons'
 import { Popconfirm } from 'antd'
+import { UserType } from "@/types/user.type";
+import { todoItemType } from "./todo-list.component";
+import { CheckboxChangeEvent } from "antd/es/checkbox";
 
-const ToDoItem = ({todoItem: thisToDoItem, setTodoList, user}) => {
+type PropsType = {
+    todoItem: todoItemType,
+    setTodoList: Dispatch<SetStateAction<todoItemType[]>>,
+    user: UserType;
+}
+
+const ToDoItem : React.FC<PropsType> = ({todoItem: thisToDoItem, setTodoList, user}) => {
     const [loadingDelete, setLoadingDelete] = useState(false)
 
     // const handleTodoItemInput = (event) => {
@@ -13,29 +22,48 @@ const ToDoItem = ({todoItem: thisToDoItem, setTodoList, user}) => {
     // }
 
 
-    const handleCheckTodoItem = (event) => {
-        // const {checked} = event.target;
+    const handleCheckTodoItem = async (event : CheckboxChangeEvent) => {
+        const {checked} = event.target;
+
+        try{
+            const res = await fetch('/api/firebase/todo-list/change-todo-item', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    todoItemId: thisToDoItem.todoItemId,
+                    isAchieved : checked,
+                })
+            })
+            await res.json()
+            setTodoList(old => old.map(todoItem => (todoItem.todoItemId === thisToDoItem.todoItemId ? {...todoItem, isAchieved : checked} : todoItem)))
+        }catch(error){
+            console.error(error)
+        }
 
         // changeTodoItemAttributesInFirebase(user.uid, thisToDoItem.todoItemId, checked)
-        // setTodoList(old => (
-        //     old.map(todoItem => todoItem.todoItemId == thisToDoItem.todoItemId ? {...todoItem, isAchieved : checked} : todoItem)))
     }
 
     const handleDeleteItem = async () => {
-        // setLoadingDelete(true)
-        // try{
-        //     await deleteToDoItemFromFirebase(user.uid, thisToDoItem.todoItemId)
-        //     setTodoList(old => old.filter(todoItem => todoItem.todoItemId !== thisToDoItem.todoItemId))
-        // }
-        // catch(err){
-        //     console.error(err)
-        // }
-        // finally{
-        //     setLoadingDelete(false)
-        // }
+        setLoadingDelete(true)
+        try{
+            const res = await fetch(`/api/firebase/todo-list/delete-todo-item?todoItemId=${thisToDoItem.todoItemId}`, {
+                method: 'DELETE',
+            })
+            const {message} = await res.json()
+            console.log(message)
+            setTodoList(old => old.filter(todoItem => todoItem.todoItemId !== thisToDoItem.todoItemId))
+        }
+        catch(err){
+            console.error(err)
+        }
+        finally{
+            setLoadingDelete(false)
+        }
     }
 
-    const cancelDelete = (event) => {
+    const cancelDelete = () => {
         // console.error('Click on no')
     }
     return (
