@@ -92,13 +92,8 @@ const TimeRecorderPage : React.FC<{routineId: string, className ?: string}> = ({
         setSeconds(timeStringToSeconds(time));
     }
 
-    useEffect(() => {
-        console.log({totalSeconds: dayjs(totalSeconds*1000).tz("Etc/GMT").format()})
-    }, [totalSeconds])
- 
 
-
-      const data = useMemo(() => {
+    const data = useMemo(() => {
         return  {
             labels: ['Time spented', 'Time left'],
             datasets: [
@@ -117,10 +112,10 @@ const TimeRecorderPage : React.FC<{routineId: string, className ?: string}> = ({
                 cutout: '90%',
               },
             ],
-          };
-      }, [seconds])
+        };
+    }, [seconds])
     
-      const options = {
+    const options = {
         animation:{
             duration: 1000,
         },
@@ -129,7 +124,7 @@ const TimeRecorderPage : React.FC<{routineId: string, className ?: string}> = ({
                 display: false,
             },
         },
-      }
+    }
 
     return (
         <div className={`${className}`}>

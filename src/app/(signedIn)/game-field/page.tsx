@@ -12,8 +12,9 @@ import RoutineCard from '@/components/routine-card.component'
 import { IoIosAddCircleOutline } from "react-icons/io";
 import AddCategoryModal from '@/components/add-category-modal.component'
 import RoutineLoading from '@/components/routine-loading.component'
-import { filterRoutines, selectFilterOptions } from './utils'
+import { filterRoutines, selectFilterOptions, daysSchedule } from './utils'
 import { FilterValuesType } from '@/types/general.type'
+import dayjs from 'dayjs'
 
 const GameField = () => {
 
@@ -26,15 +27,17 @@ const GameField = () => {
   const [selectedFilterValue, setSelectedFilterValue] = useState<FilterValuesType>(FilterValuesType.UNARCHIVED);
   const [selectedRoutines, setSelectedRoutines] = useState<RoutineType[] | null>(null)
 
+  const [selectedDays , setSelectedDays] = useState([daysSchedule[dayjs().day()].value])
+
   if(error != ''){
     throw new Error(error)
   }
 
   useEffect(() => {
     if(routines){
-      setSelectedRoutines(filterRoutines(routines, selectedFilterValue, ['monday']))
+      setSelectedRoutines(filterRoutines(routines, selectedFilterValue, selectedDays))
     }
-  }, [selectedFilterValue, routines])
+  }, [selectedFilterValue, routines, selectedDays])
 
   if (loading || !routines || !selectedRoutines) {
     return (
@@ -44,6 +47,14 @@ const GameField = () => {
 					defaultValue={FilterValuesType.UNARCHIVED}
 					placeholder="select attribute..."
 					style={{minWidth: '15rem'}}
+				/>
+        <Select
+					options={daysSchedule}
+					defaultValue={daysSchedule[dayjs().day()] as any}
+					placeholder="select attribute..."
+					style={{minWidth: '15rem'}}
+          mode='tags'
+					maxTagCount='responsive'
 				/>
       </div>
       <div className='flex gap-3'>
@@ -67,6 +78,7 @@ const GameField = () => {
       </>)
   }
 
+
   return (
     <div>
       <div className='min-h-14 my-2 flex items-center flex-wrap gap-x-5 gap-y-2'>
@@ -76,6 +88,15 @@ const GameField = () => {
 					placeholder="select attribute..."
 					style={{minWidth: '15rem'}}
 					onChange={setSelectedFilterValue}
+				/>
+        <Select
+					options={daysSchedule}
+					defaultValue={daysSchedule[dayjs().day()] as any}
+					placeholder="select attribute..."
+					style={{minWidth: '15rem'}}
+          mode='tags'
+					maxTagCount='responsive'
+					onChange={setSelectedDays}
 				/>
       </div>
       <div className='flex gap-3'>

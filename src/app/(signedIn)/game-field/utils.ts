@@ -10,6 +10,18 @@ export const selectFilterOptions = [
     { value:'unarchived', label:'Unarchived'},
 ];
 
+export const daysSchedule : {value: DaysWeekType, label: string}[] = [
+    // {value:'day', label: 'Day'},
+    {value: 'sunday', label: 'Sunday'},
+    {value: 'monday', label: 'Monday'},
+    {value: 'tuesday', label: 'Tuesday'},
+    {value: 'wednesday', label: 'Wednesday'},
+    {value: 'thursday', label: 'Thursday'},
+    {value: 'friday', label: 'Friday'},
+    {value: 'saturday', label: 'Saturday'},
+]
+
+
 const andOperator = (...conditions: boolean[]) : boolean => {
     if (conditions.length === 0) {
         return false; // No conditions to test
