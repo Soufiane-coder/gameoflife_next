@@ -55,3 +55,15 @@ export const addTimeToSpentedTime = async (uid : string, routineId: string, spen
 
     return TimestampToDayjs((await getDoc(docRef)).data()?.spentedTime)
 }
+
+export const getStatisticsOfDayRoutineFromFirebase = async (uid : string, day: string, routineId: string) => {
+    const dayStatDoc = doc(db, `users/${uid}/statistics/${day}/routineIds`, routineId);
+    let docSnap = await getDoc(dayStatDoc);
+    if (!docSnap.exists()) {
+        return dayjs(0)
+    }
+    const {spentedTime } = docSnap.data()
+    return TimestampToDayjs(spentedTime as Timestamp);
+    // return spentedTime;
+    // return Promise.resolve(data as UserType)
+}

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { getSession } from "next-auth/react";
 import { z, ZodError } from "zod";
-import authOptions from "../[...nextauth]/authOptions";
+import authOptions from "../../auth/[...nextauth]/authOptions";
 
 export const GET = async (req: NextRequest) => {
     try{

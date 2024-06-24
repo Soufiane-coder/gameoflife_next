@@ -4,7 +4,7 @@ import { z, ZodError } from "zod";
 import { getGoalsOfRoutine } from "@/lib/firebase/goal.apis";
 import { getStatisticsFromFirebase } from "@/lib/firebase/statistic.apis";
 import { getServerSession } from "next-auth";
-import authOptions from "../../auth/[...nextauth]/authOptions";
+import authOptions from "../../../auth/[...nextauth]/authOptions";
 
 const schema = z.object({
     uid: z.string().max(255).min(1),

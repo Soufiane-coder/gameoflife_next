@@ -4,6 +4,10 @@ import { addNewUser, getUserFromFirebase } from "@/lib/firebase/user.apis"
 import { signOut } from "next-auth/react"
 import { UserType } from "@/types/user.type"
 
+interface NewSessionType extends Session{
+  user: UserType;
+}
+
 const authOptions : NextAuthOptions = {
   // Configure one or more authentication providers
   providers: [

@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import authOptions from "../../auth/[...nextauth]/authOptions";
+import authOptions from "../../../auth/[...nextauth]/authOptions";
 import { getArraysOfSpentedTime, getStatisticsFromFirebase } from "@/lib/firebase/statistic.apis";
 import dayjs from "dayjs";
 

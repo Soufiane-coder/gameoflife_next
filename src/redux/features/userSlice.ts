@@ -15,7 +15,7 @@ const userInitialState : UserInitialState = {
 }
 
 export const fetchUser = createAsyncThunk('user/fetchUser', async (id: string) => {
-    const res = await fetch(`/api/auth/user?uid=${id}`)
+    const res = await fetch(`/api/firebase/user?uid=${id}`)
     return await res.json()
 })
 

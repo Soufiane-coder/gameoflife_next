@@ -16,7 +16,7 @@ const routineInitialState : RoutineInitType = {
 }
 
 export const fetchRoutines = createAsyncThunk('routine/fetchRoutines', async ({uid, lastVisit}: {uid: string, lastVisit: Dayjs}) => {
-    const res = await fetch(`/api/firebase/routines`, {
+    const res = await fetch(`/api/firebase/routine/routines`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
