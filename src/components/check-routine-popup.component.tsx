@@ -23,7 +23,7 @@ const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
     useEffect(() => {
         (async () => {
             if(open){
-                const res = await fetch(`/api/firebase/goals?uid=${user?.uid}&routineId=${routine.routineId}`)
+                const res = await fetch(`/api/firebase/goal/goals?uid=${user?.uid}&routineId=${routine.routineId}`)
                 const goals = await res.json() as GoalType[]
                 const selected = goals?.find((goal) => {
                     return goal.status == GoalStatus.WAITING && goal
@@ -40,7 +40,7 @@ const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
         (async () => {
             try {
                 if(checkGoal){
-                    await fetch('/api/firebase/check-goal', {
+                    await fetch('/api/firebase/goal/check-goal', {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ const CheckRoutinePopup = ({ open, setOpen, user, routine }: PropsType) => {
                         }),
                     })
                 }
-                const res = await fetch('/api/firebase/check-routine', {
+                const res = await fetch('/api/firebase/routine/check-routine', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

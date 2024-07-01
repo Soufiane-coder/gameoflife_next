@@ -21,7 +21,7 @@ const AddCategoryModal = ({open, setOpen, user}: PropsType) => {
     const onOk = async () => {
         setLoading(true)
         try{
-            await fetch('/api/firebase/add-category',{
+            await fetch('/api/firebase/user/add-category',{
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

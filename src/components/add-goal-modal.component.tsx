@@ -27,7 +27,7 @@ const AddGoalModal : React.FC<PropsType> = ({open, setOpen, uid, setGoals, routi
         newGoal = {...initialValues, ...newGoal, created: dayjs(new Date())}
         setLoading(true)
         try{
-            const goalId = await fetch('/api/firebase/add-goal', {
+            const goalId = await fetch('/api/firebase/goal/add-goal', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

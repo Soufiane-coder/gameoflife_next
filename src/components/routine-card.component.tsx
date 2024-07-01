@@ -45,7 +45,7 @@ const RoutineCard = ({routine, className = ''} : {routine : RoutineType, classNa
     setDeleteLoading(true);
 		try{
       notificationApi.destroy()
-			await fetch(`/api/firebase/delete-routine?uid=${user?.uid}&routineId=${routineId}`, {
+			await fetch(`/api/firebase/routine/delete-routine?uid=${user?.uid}&routineId=${routineId}`, {
         method: 'DELETE'
       })
       dispatch(removeRoutine(routineId as string))
@@ -67,7 +67,7 @@ const RoutineCard = ({routine, className = ''} : {routine : RoutineType, classNa
 
   const handleArchiveRoutine = async() => {
     try{
-      const res = await fetch('/api/firebase/archive-routine', {
+      const res = await fetch('/api/firebase/routine/archive-routine', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -165,7 +165,7 @@ const RoutineCard = ({routine, className = ''} : {routine : RoutineType, classNa
   const onSkip = async () => {
     try{
       setSkipLoading(true)
-      await fetch('/api/firebase/buy-skip', {
+      await fetch('/api/firebase/routine/buy-skip', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -54,7 +54,7 @@ const StatisticLineWProg = () => {
     useEffect(() => {
         (async () => {
             try{
-                const req = await fetch(`/api/firebase/days-statistics`)
+                const req = await fetch(`/api/firebase/statistic/days-statistics`)
                 const statistics = await req.json() as StatisticsType[]
                 setLineStatistics(statistics.map(stat => ({day: stat.day, checkedRoutines: stat.checkedRoutines?.length || 0})))
                 setIsLoading(false)

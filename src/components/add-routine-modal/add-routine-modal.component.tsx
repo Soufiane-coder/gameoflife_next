@@ -56,7 +56,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 		newRoutine = { ...initialValues, ...newRoutine, bgEmojiColor, emoji }
 		try {
 			setLoading(true)
-			const res = await fetch('/api/firebase/add-routine', {
+			const res = await fetch('/api/firebase/routine/add-routine', {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ const AddRoutineModal = ({ open, setOpen, user, routineToEdit }: PropsType) => {
 		newRoutine = { ...initialValues, ...newRoutine, bgEmojiColor, emoji }
 		try{
 			setLoading(true)
-			await fetch('/api/firebase/edit-routine', {
+			await fetch('/api/firebase/routine/edit-routine', {
 				method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'

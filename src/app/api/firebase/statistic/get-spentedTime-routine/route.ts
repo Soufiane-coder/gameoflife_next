@@ -25,7 +25,6 @@ export const GET = async (req: NextRequest) => {
             console.error("There is no user in days statistics api")
             throw new Error("There is no user in days statistics api")
         }
-        console.log({uid: (session.user as any).uid, day: data.day, routineId: data.routineId  })
         const spentedTime = await getStatisticsOfDayRoutineFromFirebase((session.user as UserType).uid , data.day ,data.routineId)
         return NextResponse.json(spentedTime, {status: 200})
     }catch(error: any){ // todo add zod

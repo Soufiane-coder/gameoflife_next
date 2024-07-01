@@ -18,7 +18,7 @@ const PieStatistic = () => {
       if(!routines) return;
 
       ;(async () => {
-          const req = await fetch('/api/firebase/spented-time-statistics');
+          const req = await fetch('/api/firebase/statistic/spented-time-statistics');
           const data = await req.json()
           setSpentedTime(data)
       })()

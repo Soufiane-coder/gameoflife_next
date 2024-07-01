@@ -26,6 +26,24 @@ export const getArraysOfSpentedTime = async (uid: string, days: {day: string}[])
     )
 }
 
+export const getDaysRoutineSpentedTime = async (uid: string, routineId: string, days: {day: string}[]) => {
+   
+   const allData : Record<string, Dayjs> = {}
+
+    await Promise.all(
+        days.map(async ({day}) => {
+            const dayStatDoc = doc(db, `users/${uid}/statistics/${day}/routineIds`, routineId);
+            let docSnap = await getDoc(dayStatDoc);
+            if (!docSnap.exists()) {
+                return;
+            }
+            allData[day] = TimestampToDayjs(docSnap.data()?.spentedTime)
+        })
+    )
+
+    return allData
+}
+
 export const addTimeToSpentedTime = async (uid : string, routineId: string, spentedTime : string) => {
     const newSpentedTime = dayjs(spentedTime)
     

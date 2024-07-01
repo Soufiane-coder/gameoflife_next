@@ -58,7 +58,7 @@ const TimeRecorderPage : React.FC<{routineId: string, className ?: string}> = ({
     useEffect(() => {
         (async () => {
             if (!isActive){
-                const req = await fetch('/api/firebase/add-spented-time', {
+                const req = await fetch('/api/firebase/routine/add-spented-time', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

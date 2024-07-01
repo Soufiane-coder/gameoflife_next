@@ -26,7 +26,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
         if(!goals){
             (async () => {
                 try{
-                    const res = await fetch(`/api/firebase/goals?uid=${user?.uid}&routineId=${routineId}`)
+                    const res = await fetch(`/api/firebase/goal/goals?uid=${user?.uid}&routineId=${routineId}`)
                     const res_goals = await res.json() as GoalType[]
                     setGoals(res_goals)
                 }catch(error){
@@ -57,7 +57,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
     const handleRemoveGoal = async () => {
         try{
             notificationApi.destroy()
-            await fetch(`/api/firebase/delete-goal?uid=${user?.uid}&routineId=${routineId}&goalId=${selectedGoal?.goalId}`, {
+            await fetch(`/api/firebase/goal/delete-goal?uid=${user?.uid}&routineId=${routineId}&goalId=${selectedGoal?.goalId}`, {
                 method: 'DELETE'
             })
             setGoals((old) => (old ?? []).filter((goal) => goal.goalId !== selectedGoal?.goalId))
@@ -96,7 +96,7 @@ const RoadPath = ({routineId} : {routineId: string}) => {
         if(!selectedGoal || selectedGoal.status === GoalStatus.DONE) return
         try{
             setLoadingCheck(true)
-            await fetch('/api/firebase/check-goal', {
+            await fetch('/api/firebase/goal/check-goal', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
