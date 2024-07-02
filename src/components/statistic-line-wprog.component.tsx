@@ -14,7 +14,8 @@ import {
   } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Card } from 'antd'
-import { generateLast30Days } from '@/app/(signedIn)/routine/[routineId]/statistic/page';
+import { generateLast30Days } from '@/app/(signedIn)/utils';
+
 
 ChartJS.register(
     CategoryScale,

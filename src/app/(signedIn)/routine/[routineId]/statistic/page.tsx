@@ -23,14 +23,7 @@ ChartJS.register(
     Tooltip,
     Legend
   );
-
-export const generateLast30Days = () => {
-    const days = [];
-    for (let i = 30; i >= 0; --i) {
-      days.push(dayjs().subtract(i, 'day').format('YYYY-MM-DD'));
-    }
-    return days;
-};
+import { generateLast30Days } from '@/app/(signedIn)/utils';
 
 const Statistic = ({params}: {params: {routineId : string}}) => {
     const {routineId} = params;

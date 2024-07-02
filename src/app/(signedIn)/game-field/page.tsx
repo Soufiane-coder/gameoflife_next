@@ -1,7 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useGetRoutinesQuery, useGetUserQuery } from '@/redux/services/apiSlice'
 import { UserType } from '@/types/user.type'
 import { Button, Select } from 'antd'
 import AddRoutineModal from '@/components/add-routine-modal/add-routine-modal.component'
