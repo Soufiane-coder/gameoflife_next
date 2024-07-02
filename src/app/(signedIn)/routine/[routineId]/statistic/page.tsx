@@ -24,13 +24,13 @@ ChartJS.register(
     Legend
   );
 
-const generateLast30Days = () => {
+export const generateLast30Days = () => {
     const days = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 30; i >= 0; --i) {
       days.push(dayjs().subtract(i, 'day').format('YYYY-MM-DD'));
     }
     return days;
-  };
+};
 
 const Statistic = ({params}: {params: {routineId : string}}) => {
     const {routineId} = params;
@@ -39,7 +39,7 @@ const Statistic = ({params}: {params: {routineId : string}}) => {
     useEffect(() => {
         ;(async () =>{
             try{
-                const res  = await fetch(`/api/firebase/statistic/spentedTime-days?routineId=${routineId}`)
+                const res  = await fetch(`/api/firebase/statistic/progress-spentedTime-routine?routineId=${routineId}`)
                 const data = await res.json() as Record<string, string>
                 setStat(data)
             }catch(error){
@@ -72,12 +72,10 @@ const Statistic = ({params}: {params: {routineId : string}}) => {
     };
 
     const data = {
-        // labels : lineStatistics?.map(({day}) => day),
         labels: generateLast30Days(),
         datasets: [
           {
             label: 'Chart of progress',
-            // data: lineStatistics?.map(({checkedRoutines}) => checkedRoutines), // in case there is no checkedRoutines
             data: generateLast30Days().map(day => stat && stat[day] ? dayjs(stat[day]).unix() : 0),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',

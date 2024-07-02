@@ -18,7 +18,7 @@ const PieStatistic = () => {
       if(!routines) return;
 
       ;(async () => {
-          const req = await fetch('/api/firebase/statistic/spented-time-statistics');
+          const req = await fetch('/api/firebase/statistic/total-spentedTime-routines');
           const data = await req.json()
           setSpentedTime(data)
       })()
@@ -40,7 +40,7 @@ const PieStatistic = () => {
 
     return (
         <Card loading={!spentedTime} className='p-12'>
-            {Object.keys(spentedTime || []).length !== 0 ? <Pie data={data} /> : <h5>There is no statistics yet start checking routines</h5> }
+          {Object.keys(spentedTime || []).length !== 0 ? <Pie data={data} /> : <h5>There is no statistics yet start checking routines</h5> }
         </Card>
     )
 }

@@ -25,7 +25,13 @@ export const GET = async (req: NextRequest) => {
         // }
         // schema.parse(data)
         const statistics = await getStatisticsFromFirebase((session?.user as any).uid)
-        return NextResponse.json(statistics , {status: 200})
+        const result : Record<string, string[]> = {}
+        statistics.forEach(stat => {
+            if(stat?.checkedRoutines){
+                result[stat.day] = stat.checkedRoutines
+            }
+        })
+        return NextResponse.json(result , {status: 200})
     }catch(error: any){
         if(error instanceof ZodError){
             return NextResponse.json({message: 'Validation Error', error: {errors: error.errors}}, {status: 400})

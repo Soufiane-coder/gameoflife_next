@@ -14,6 +14,7 @@ import {
   } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { Card } from 'antd'
+import { generateLast30Days } from '@/app/(signedIn)/routine/[routineId]/statistic/page';
 
 ChartJS.register(
     CategoryScale,
@@ -48,18 +49,16 @@ const isToday = (dateString : string) => {
 }
 
 const StatisticLineWProg = () => {
-    const [lineStatistics, setLineStatistics] = useState<{day: string, checkedRoutines: number | undefined}[] | null>(null)
+    const [lineStatistics, setLineStatistics] = useState<Record<string, string[]> | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
         (async () => {
             try{
-                const req = await fetch(`/api/firebase/statistic/days-statistics`)
-                const statistics = await req.json() as StatisticsType[]
-                setLineStatistics(statistics.map(stat => ({day: stat.day, checkedRoutines: stat.checkedRoutines?.length || 0})))
+                const req = await fetch(`/api/firebase/statistic/checked-routines`)
+                const statistics : Record<string, string[]> = await req.json()
+                setLineStatistics(statistics)
                 setIsLoading(false)
-                // console.log({statistics})
-                // console.log(statistics.map(stat => ({day: stat.day, checkedRoutines: stat.checkedRoutines.length})))
             }catch(error){
                 console.error(error)
             }
@@ -90,28 +89,20 @@ const StatisticLineWProg = () => {
     };
 
     const data = {
-        labels : lineStatistics?.map(({day}) => day),
+        labels : generateLast30Days(),
         datasets: [
           {
             label: 'Chart of progress',
-            data: lineStatistics?.map(({checkedRoutines}) => checkedRoutines), // in case there is no checkedRoutines
+            data:  generateLast30Days().map(day => lineStatistics && lineStatistics[day] ? lineStatistics[day].length : 0),
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
           },
-        //   {
-        //     label: 'Dataset 2',
-        //     data: lineStatistics?.map(() => faker.datatype.number({ min: -1000, max: 1000 })),
-        //     borderColor: 'rgb(53, 162, 235)',
-        //     backgroundColor: 'rgba(53, 162, 235, 0.5)',
-        //   },
         ],
       };
 
     return (
         <Card loading={isLoading} className=''>
-            {
-                lineStatistics?.length === 0 ? <h5>There is no statistics yet start checking routines</h5> : <Line options={options} data={data} />
-            }
+            <Line options={options} data={data} />
         </Card>
     )
 }

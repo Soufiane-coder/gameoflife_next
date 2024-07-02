@@ -50,7 +50,7 @@ const StatisticRout = ({params}: {params: {routineId : string}}) => {
     useEffect(() => {
         ;(async () =>{
             try{
-                const res  = await fetch(`/api/firebase/statistic/get-spentedTime-routine?routineId=${routineId}&day=${selectedDay}`)
+                const res  = await fetch(`/api/firebase/statistic/day-spentedTime-routine?routineId=${routineId}&day=${selectedDay}`)
                 const data = await res.json()
                 setSpentedTime(dayjs(data))
             }catch(error){
